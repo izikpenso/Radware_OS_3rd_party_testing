@@ -1,0 +1,33 @@
+DATABASE_PASSWORD=os
+RABBIT_PASSWORD=os
+SERVICE_TOKEN=os
+SERVICE_PASSWORD=os
+ADMIN_PASSWORD=os
+
+disable_service n-net
+
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service quantum
+enable_service q-lbaas
+
+#For tempest
+
+enable_service tempest
+API_RATE_LIMIT=False
+
+
+
+SWIFT_HASH=openstack
+
+ACTIVE_TIMEOUT=12000
+BOOT_TIMEOUT=12000
+RECLONE=yes
+
+SCREEN_LOGDIR=~/devstack/logs
+LOGDAYS=1
+LOGFILE=stack.sh.log
+
