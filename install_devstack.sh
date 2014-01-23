@@ -24,10 +24,12 @@ if ! which sshpass > /dev/null; then
 fi
 
 #source the resource file that contains all the needed environment variables for script to run.
+echo "will use file $1"
 source $1
 
+
 #git Clone devstack to new VM
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'git clone https://github.com/openstack-dev/devstack.git; mkdir ~/scripts'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'git clone https://github.com/openstack-dev/devstack.git;'
 
 #Copying localrc, resource file to devstack machine
 sshpass -p $VM_SSH_PASSWORD scp localrc $VM_SSH_USER@$VM_IP:~/devstack/.
