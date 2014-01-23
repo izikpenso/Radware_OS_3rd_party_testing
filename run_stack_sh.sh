@@ -9,7 +9,6 @@ usage(){
 
 if (( $# != 1 )); then
     usage
-        exit 0
 fi
 
 # sshpass cmd sould be installed fo this script to work, cheking
