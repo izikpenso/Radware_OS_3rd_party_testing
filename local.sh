@@ -48,7 +48,6 @@ echo "HA_NETWORK_ID = $HA_NETWORK_ID"
 # Editing the test.cfg with the updated value
 #
 
-#sed -i "s/network_server_dummy_id/${HA_NETWORK_ID}/g" ~/scripts/vdirect_cfg/test.cfg
 echo "export HA_NETWORK_ID=$HA_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 #
 # create subnet to ha-network on 192.168.100.0 255.255.255.0 192.168.100.1 with allocation pool of 192.168.100.100, 192.168.100.199
@@ -60,10 +59,6 @@ SERVER_NETWORK_ID=`neutron net-create server-network -f shell -c id | grep id | 
 
 echo "SERVER_NETWORK_ID = $SERVER_NETWORK_ID"
 #
-# Editing the test.cfg with the updated value
-#
-
-#sed -i "s/network_client_dummy_id/${SERVER_NETWORK_ID}/g" ~/scripts/vdirect_cfg/test.cfg
 echo "export SERVER_NETWORK_ID=$SERVER_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 
@@ -106,13 +101,7 @@ source ~/devstack/openrc admin demo
 PRIVATE_NETWORK_ID=`neutron net-show private -f shell -c id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
 echo "PRIVATE_NETWORK_ID = $PRIVATE_NETWORK_ID"
 
-#
-# Editing the test.cfg with the updated value
-#
-
-#sed -i "s/network_management_dummy_id/${PRIVATE_NETWORK_ID}/g" ~/scripts/vdirect_cfg/test.cfg
 echo "export NETWORK_MANAGEMENT_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
-
 
 #
 
@@ -126,7 +115,6 @@ sleep 30s
 VDIRECT_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
 echo "VDIRECT_IP = $VDIRECT_IP"
-#sed -i "s/vdirect_dummy_id/${VDIRECT_IP}/g" ~/scripts/vdirect_cfg/test.cfg
 
 #
 echo "export VDIRECT_IP=$VDIRECT_IP" | sudo tee -a ~/devstack/jobrc
