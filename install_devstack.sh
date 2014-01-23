@@ -30,11 +30,11 @@ source $1
 #git Clone devstack to new VM
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'git clone https://github.com/openstack-dev/devstack.git; mkdir ~/scripts'
 
-#Copying localrc, local.sh, and vdirect_cfg python scripts to devstack machine
+#Copying localrc, resource file to devstack machine
 sshpass -p $VM_SSH_PASSWORD scp localrc $VM_SSH_USER@$VM_IP:~/devstack/.
 
 sshpass -p $VM_SSH_PASSWORD scp $1 $VM_SSH_USER@$VM_IP:~/devstack/.
 
 #Editing localrc: Adding HOST_IP,FLAT_INTERFACE ,NEUTRON_BRANCH parameters
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo 'HOST_IP="$VM_IP"' >> ~/devstack/localrc; echo FLAT_INTERFACE=eth0 >> ~/devstack/localrc ; echo 'NEUTRON_BRANCH="$GERRIT_REFSPEC"' >> ~/devstack/localrc; chmod a+x ~/devstack/local.sh; chmod a+x ~/scripts/edit_vdirect_conf_file.sh'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo 'HOST_IP="$VM_IP"' >> ~/devstack/localrc; echo FLAT_INTERFACE=eth0 >> ~/devstack/localrc ; echo 'NEUTRON_BRANCH="$GERRIT_REFSPEC"' >> ~/devstack/localrc;'
 
