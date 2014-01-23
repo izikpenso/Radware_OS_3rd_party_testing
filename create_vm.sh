@@ -35,7 +35,7 @@ ssh-keygen -f ~/.ssh/known_hosts -R $OPENSTACK_SERVER_IP
 export NET_ID=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $OPENSTACK_SSH_USER@$OPENSTACK_SERVER_IP 'source '"$OPENSTACK_KEYSTONERC_FILE"';neutron net-show '"$NETWORK_NAME"'' | grep ' id ' | cut -d '|' -f 3 | cut -d " " -f 2)
 
 #Booting up new VM and getting the VM ID from openstack server
-export VM_ID=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $OPENSTACK_SSH_USER@$OPENSTACK_SERVER_IP 'source '"$OPENSTACK_KEYSTONERC_FILE"';  nova boot --poll --flavor '"$FLAVOR"' --image '"$IMAGE"' '"$VM_NAME"' --nic net-id='"$NET_ID"' --key-name '"$KEYPAIR_NAME"'' | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+export VM_ID=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $OPENSTACK_SSH_USER@$OPENSTACK_SERVER_IP 'source '"$OPENSTACK_KEYSTONERC_FILE"';  nova boot --poll --flavor '"$FLAVOR"' --image '"$IMAGE_NAME"' '"$VM_NAME"' --nic net-id='"$NET_ID"' --key-name '"$KEYPAIR_NAME"'' | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 # wait 60 seconds to make sure the boot started.
 sleep 60s
