@@ -14,10 +14,10 @@ fi
 
 # sshpass cmd sould be installed fo this script to work, cheking
 if ! which sshpass > /dev/null; then
-   echo -e "sshpass command not found! this package should be installed for this script will be able to run? (y/n) \c"
-   read
-   if "$REPLY" = "y"; then
-      sudo apt-get install sshpass
+   echo -e "sshpass command not found! this package should be installed for this script will be able to run, would you like to install it now? (y/n) \c"
+   read REPLY
+   if [ "$REPLY" == "y" ]; then
+      sudo apt-get --force-yes --yes install sshpass
    else
       echo "Script can't run if sshpass package isn't installed, exiting script!"
       exit 0
@@ -38,7 +38,7 @@ export NET_ID=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking
 export VM_ID=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $OPENSTACK_SSH_USER@$OPENSTACK_SERVER_IP 'source '"$OPENSTACK_KEYSTONERC_FILE"';  nova boot --poll --flavor '"$FLAVOR"' --image '"$IMAGE_NAME"' '"$VM_NAME"' --nic net-id='"$NET_ID"' --key-name '"$KEYPAIR_NAME"'' | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 # wait 60 seconds to make sure the boot started.
-sleep 60s
+sleep 30s
 
 #Getting tne new VM ID from openstack server
 export VM_IP=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $OPENSTACK_SSH_USER@$OPENSTACK_SERVER_IP 'source '"$OPENSTACK_KEYSTONERC_FILE"'; nova show '"$VM_ID"'' | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
@@ -47,7 +47,7 @@ export VM_IP=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking 
 #removes ip ssh known hosts
 ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP 
 
-#Adding the VM hostname to the /etc/hosts file on the VM itself
+#Adding the VM hostname to the /etc/hosts file on the VM itself. || true  doesn't fail if error.
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo '"$VM_IP"' '"$VM_NAME"'.'"$VM_DOMAIN"' '"$VM_NAME"' | sudo tee -a /etc/hosts || true'
 
 # Adding VM_IP to resource file, so we can use it later.
