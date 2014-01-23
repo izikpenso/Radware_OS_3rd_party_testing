@@ -5,7 +5,7 @@
 source ~/devstack/jobrc
 
 
-sed -i "s/devstack_dummy_ip/$(VM_IP)/g" ~/scripts/vdirect_cfg/test.cfg
+sed -i "s/devstack_dummy_ip/${VM_IP}/g" ~/scripts/vdirect_cfg/test.cfg
 
 sed -i "s/network_management_dummy_id/${NETWORK_MANAGEMENT_ID}/g" ~/scripts/vdirect_cfg/test.cfg
 
