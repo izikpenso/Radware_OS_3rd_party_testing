@@ -38,7 +38,7 @@ sshpass -p $VM_SSH_PASSWORD scp edit_vdirect_conf_file.sh $VM_SSH_USER@$VM_IP:~/
 
 sshpass -p $VM_SSH_PASSWORD scp -r vdirect_cfg/  $VM_SSH_USER@$VM_IP:~/scripts/
 
-sshpass -p $VM_SSH_PASSWORD scp radware_test_load_balancer.py $VM_SSH_USER@$VM_IP:/opt/stack/tempest/tempest/api/network/.
+sshpass -p $VM_SSH_PASSWORD scp tempest/radware_test_load_balancer.py $VM_SSH_USER@$VM_IP:/opt/stack/tempest/tempest/api/network/.
 
 sshpass -p $VM_SSH_PASSWORD scp -r vdirect_cfg/  $VM_SSH_USER@$VM_IP:/opt/stack/tempest/tempest/api/network/
 
