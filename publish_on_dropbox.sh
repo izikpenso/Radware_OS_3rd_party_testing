@@ -5,5 +5,8 @@ source jobrc
 
  ~/bin/dropbox.py start
 
-cp tempest.log ~/Dropbox/Public/tempest"$GERRIT_REFSPEC".log
-cp test_load_balancer_log"$GERRIT_REFSPEC".xml ~/Dropbox/Public/.
+PATCH_NAME=$(echo $GERRIT_REFSPEC | sed -e 's/\//_/g')
+
+tar cvzf $PATCH_NAME.tar.gz tempest.log test_load_balancer_log.xml
+
+cp $PATCH_NAME.tar.gz ~/Dropbox/Public/.
