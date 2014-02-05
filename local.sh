@@ -20,9 +20,6 @@ source ~/devstack/jobrc
 #
 # create the Alteon image 
 #
-if [ ! -f ~/images/$ALTEON_IMAGE ]; then
-    echo "ERROR: File not found ~/images/$ALTEON_IMAGE"
-fi
 
 glance image-create --name Alteon-29-0-60-0 --file ~/images/$ALTEON_IMAGE  --disk-format qcow2 --container-format bare --is-public True
 
@@ -33,22 +30,16 @@ glance image-create --name Alteon-29-0-60-0 --file ~/images/$ALTEON_IMAGE  --dis
 glance image-create --name vDirect-VA-2-20-00 --file ~/images/$VDIRECT_IMAGE --disk-format qcow2 --container-format bare --is-public True
 
 #
-# create the Web image
-#Not needed the test uses the cirros image as web server.
-#glance image-create --name web-image --file ~/images/web-image.qcow2 --disk-format qcow2 --container-format bare --is-public True
-
-
-#
 # create admin network called ha-network
 #
 HA_NETWORK_ID=`neutron net-create ha-network -f shell -c id | grep id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
 
-echo "HA_NETWORK_ID = $HA_NETWORK_ID"
-#
-# Editing the test.cfg with the updated value
-#
 
+#
+# Adding new netowrk id to resource file so it can be used later
+#
 echo "export HA_NETWORK_ID=$HA_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+
 #
 # create subnet to ha-network on 192.168.100.0 255.255.255.0 192.168.100.1 with allocation pool of 192.168.100.100, 192.168.100.199
 #
@@ -57,8 +48,10 @@ neutron subnet-create --name ha-subnet --gateway 192.168.100.1 --allocation_pool
 
 SERVER_NETWORK_ID=`neutron net-create server-network -f shell -c id | grep id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
 
-echo "SERVER_NETWORK_ID = $SERVER_NETWORK_ID"
 #
+# Adding new netowrk id to resource file so it can be used later
+#
+
 echo "export SERVER_NETWORK_ID=$SERVER_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 
@@ -68,7 +61,7 @@ echo "export SERVER_NETWORK_ID=$SERVER_NETWORK_ID" | sudo tee -a ~/devstack/jobr
 neutron subnet-create --name server-subnet --gateway 192.168.200.1 --allocation_pool start=192.168.200.100,end=192.168.200.199 $SERVER_NETWORK_ID 192.168.200.0/24 
 
 #
-# change identity to admin
+# change project to demo
 #
 source ~/devstack/openrc admin demo
 
@@ -104,18 +97,19 @@ echo "PRIVATE_NETWORK_ID = $PRIVATE_NETWORK_ID"
 echo "export NETWORK_MANAGEMENT_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 #
+# Boot the vDirect
+#
 
 VM_ID=$(nova boot --poll --flavor 'm1.small' --image 'vDirect-VA-2-20-00' vDirectServer --nic net-id=$PRIVATE_NETWORK_ID | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
-sleep 30s
 
 #
 # finding the vDirect IP 
 #
 VDIRECT_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
-echo "VDIRECT_IP = $VDIRECT_IP"
-
+#
+# Adding the vDirect IP  to resource file so it can be used later
 #
 echo "export VDIRECT_IP=$VDIRECT_IP" | sudo tee -a ~/devstack/jobrc
 
