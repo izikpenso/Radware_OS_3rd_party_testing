@@ -15,14 +15,14 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import time
+
 from tempest.api.network import base
 from tempest.common.utils import data_utils
 from tempest.api.network import test_load_balancer
-#from tempest import test
-import time
 
 
-class RadwareLoadBalancer(test_load_balancer.LoadBalancerJSON):
+class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
     _interface = 'json'
 
     @classmethod
