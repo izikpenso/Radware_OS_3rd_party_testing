@@ -24,20 +24,24 @@ def load_config(cfg_filename):
 
 
 def setup_vdirect_opensack_cfg(config):
-    LOG.debug('initialize vDirect client')
-    rest_client = VD.vDirectClient(server=config['vdirect_ip'],
+    try:
+        LOG.debug('initialize vDirect client')
+        rest_client = VD.vDirectClient(server=config['vdirect_ip'],
                                        user=config['vdirect_user'],
                                        password=config['vdirect_password'])
-    VD.create_openstack_container(rest_client, config)
-    VD.validate_openstack_container(rest_client, config)
-    VD.create_vrrp_pool(rest_client, config)
-    VD.assign_vrrp_id_to_pool(rest_client, config)
-    VD.create_network_pool(rest_client, config)
-    VD.create_resource_pool(rest_client, config)
-    VD.upload_workflow_template(config['l2_l3_workflow_template_path'],
-                                 rest_client)
-    VD.upload_workflow_template(config['l4_workflow_template_path'],
-                                 rest_client)
+        VD.create_openstack_container(rest_client, config)
+        VD.validate_openstack_container(rest_client, config)
+        VD.create_vrrp_pool(rest_client, config)
+        VD.assign_vrrp_id_to_pool(rest_client, config)
+        VD.create_network_pool(rest_client, config)
+        VD.create_resource_pool(rest_client, config)
+        VD.upload_workflow_template(config['l2_l3_workflow_template_path'],
+                                    rest_client)
+        VD.upload_workflow_template(config['l4_workflow_template_path'],
+                                    rest_client)
+    except Exception as e:
+        LOG.error('Fail to invoke vDirect command. Failure details: {0}'.format(e.message))
+    
 
 
 if __name__ == '__main__':
