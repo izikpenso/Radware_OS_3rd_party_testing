@@ -5,7 +5,7 @@ import time
 import logging
 import json
 import sys
-import lib.vdirect_rest_client as VD
+import lib.vdirect_client as VD
 
 LOG = logging.getLogger(__name__)
 FORMAT = "%(levelname)s %(filename)s %(asctime)s %(lineno)d %(message)s"
