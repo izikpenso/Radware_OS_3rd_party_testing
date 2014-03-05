@@ -40,7 +40,7 @@ DELETE_HEADER = {'Content-Type':
 
 
 
-class vDirectRESTClient:
+class vDirectClient:
     """REST server proxy to Radware vDirect."""
 
     def __init__(self,
@@ -65,7 +65,7 @@ class vDirectRESTClient:
         debug_params = {'server': self.server,
                         'port': self.port,
                         'ssl': self.ssl}
-        LOG.debug('vDirectRESTClient:init server=%(server)s, '
+        LOG.debug('vDirectClient:init server=%(server)s, '
                   'port=%(port)d, '
                   'ssl=%(ssl)r', debug_params)
 
@@ -136,7 +136,7 @@ def _rest_wrapper(response, success_codes=[202]):
         return response[RESP_DATA]
 
 
-def _upload_workflow_template(zipFilename, rest_client):
+def upload_workflow_template(zipFilename, rest_client):
     LOG.debug('Uploading workflow template')
     with open(zipFilename, mode='rb') as file:
         fileContent = file.read()
@@ -159,7 +159,7 @@ def delete_service(rest_client, service_name):
                                           '/api/service/%s' % service_name,
                                           DELETE_HEADER, None), [202])
 
-def _create_openstack_container(rest_client, config):
+def create_openstack_container(rest_client, config):
     LOG.debug('Createing Openstack container on vDirect')
     return _rest_wrapper(rest_client.call('POST',
                                           '/api/container',
@@ -167,7 +167,7 @@ def _create_openstack_container(rest_client, config):
                                           CONTAINER_HEADER), [201, 204])
 
 
-def _validate_openstack_container(rest_client, config):
+def validate_openstack_container(rest_client, config):
     LOG.debug('Validating Openstack container on vDirect')
     return _rest_wrapper(rest_client.call('POST',
                                           '/api/container?validate=',
@@ -175,7 +175,7 @@ def _validate_openstack_container(rest_client, config):
                                           CONTAINER_HEADER), [204])
 
 
-def _create_vrrp_pool(rest_client, config):
+def create_vrrp_pool(rest_client, config):
     LOG.debug('Creating vrrp pool on vDirect')
     return _rest_wrapper(rest_client.call('POST',
                                           '/api/resource/vrrp',
@@ -183,7 +183,7 @@ def _create_vrrp_pool(rest_client, config):
                                           VRRP_POOL_HEADER), [201])
 
 
-def _assign_vrrp_id_to_pool(rest_client, config):
+def assign_vrrp_id_to_pool(rest_client, config):
     LOG.debug('Creating assign vrrp id to pool on vDirect')
     return _rest_wrapper(rest_client.call('POST',
                                           '/api/resource/vrrp/%(name)s' % config['vrrp_pool_name'],
@@ -191,7 +191,7 @@ def _assign_vrrp_id_to_pool(rest_client, config):
                                           VRRP_ID_HEADER), [200])
 
 
-def _create_network_pool(rest_client, config):
+def create_network_pool(rest_client, config):
     LOG.debug('Creating network pool on vDirect')
     return _rest_wrapper(rest_client.call('POST',
                                           '/api/resource/network',
@@ -199,7 +199,7 @@ def _create_network_pool(rest_client, config):
                                           NETWORK_HEADER), [201])
 
 
-def _create_resource_pool(rest_client, config):
+def create_resource_pool(rest_client, config):
     LOG.debug('Creating resource pool on vDirect')
     return _rest_wrapper(rest_client.call('POST',
                          '/api/resource/containerPool',

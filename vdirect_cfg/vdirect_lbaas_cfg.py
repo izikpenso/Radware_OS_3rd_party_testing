@@ -18,24 +18,25 @@ LOG.setLevel(logging.DEBUG)
 
 def load_config(cfg_filename):
     LOG.debug('Reading Configuration file - ' + cfg_filename)
-    LOG.debug(json.load(open(cfg_filename)))
-    return json.load(open(cfg_filename))
+    cfg = json.load(open(cfg_filename))
+    LOG.debug(cfg)
+    return cfg
 
 
 def setup_vdirect_opensack_cfg(config):
-    LOG.debug('initialize vDirect rest client')
-    rest_client = VD.vDirectRESTClient(server=config['vdirect_ip'],
+    LOG.debug('initialize vDirect client')
+    rest_client = VD.vDirectClient(server=config['vdirect_ip'],
                                        user=config['vdirect_user'],
                                        password=config['vdirect_password'])
-    VD._create_openstack_container(rest_client, config)
-    VD._validate_openstack_container(rest_client, config)
-    VD._create_vrrp_pool(rest_client, config)
-    VD._assign_vrrp_id_to_pool(rest_client, config)
-    VD._create_network_pool(rest_client, config)
-    VD. _create_resource_pool(rest_client, config)
-    VD._upload_workflow_template(config['l2_l3_workflow_template_path'],
+    VD.create_openstack_container(rest_client, config)
+    VD.validate_openstack_container(rest_client, config)
+    VD.create_vrrp_pool(rest_client, config)
+    VD.assign_vrrp_id_to_pool(rest_client, config)
+    VD.create_network_pool(rest_client, config)
+    VD.create_resource_pool(rest_client, config)
+    VD.upload_workflow_template(config['l2_l3_workflow_template_path'],
                                  rest_client)
-    VD._upload_workflow_template(config['l4_workflow_template_path'],
+    VD.upload_workflow_template(config['l4_workflow_template_path'],
                                  rest_client)
 
 
