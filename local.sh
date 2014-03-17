@@ -137,15 +137,3 @@ else
  python ~/scripts/vdirect_cfg/vdirect_lbaas_cfg.py ~/scripts/vdirect_cfg/test.cfg
  
 fi
-
-#
-# add admin as a user to alt_demo
-#
-source ~/devstack/openrc admin demo
-USER_ID=$(keystone user-list | grep admin | awk 'BEGIN { FS = "|" } ; { print $2 }' | tr -d " ")
-ROLE_ID=$(keystone role-list | grep admin | awk 'BEGIN { FS = "|" } ; { print $2 }'| tr -d " " )
-TENANT_ID=$(keystone tenant-list | grep alt_demo | awk 'BEGIN { FS = "|" } ; { print $2 }'| tr -d " ")
-keystone user-role-add --user=$USER_ID --role=$ROLE_ID --tenant-id=$TENANT_ID
-
-
-
