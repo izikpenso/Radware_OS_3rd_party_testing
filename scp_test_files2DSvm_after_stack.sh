@@ -28,10 +28,11 @@ if ! which sshpass > /dev/null; then
    fi
 fi
 
+# copying vdirect_cfg with modified test.cf to tempest dir
+
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cp -r ~/scripts/vdirect_cfg/ /opt/stack/tempest/tempest/api/network/'
+
 # copying radware files to Devstack VM 
-
-
-sshpass -p $VM_SSH_PASSWORD scp tempest/radware_test_load_balancer.py $VM_SSH_USER@$VM_IP:/opt/stack/tempest/tempest/api/network/.
 
 sshpass -p $VM_SSH_PASSWORD scp -r vdirect_cfg/  $VM_SSH_USER@$VM_IP:/opt/stack/tempest/tempest/api/network/
 

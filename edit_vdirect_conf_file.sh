@@ -4,6 +4,9 @@
 
 source ~/devstack/jobrc
 
+ALTEON_VERSION=$(echo $ALTEON_IMAGE_NAME | cut -d "-" --complement -s -f1)
+
+sed -i "s/dummy_version/${ALTEON_VERSION}/g" ~/scripts/vdirect_cfg/test.cfg
 
 sed -i "s/devstack_dummy_ip/${VM_IP}/g" ~/scripts/vdirect_cfg/test.cfg
 

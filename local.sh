@@ -76,16 +76,10 @@ done
 
 #
 # modify sec groups
-declare -a TENANTS=('demo' 'alt_demo');
-for tenant in "${TENANTS[@]}"
-do
-  source openrc "${tenant}" "${tenant}"
-  neutron security-group-rule-create --protocol tcp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 default
-  neutron security-group-rule-create --protocol udp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 default
-  neutron security-group-rule-create --protocol icmp --direction ingress --remote-ip-prefix 0.0.0.0/0 default
-done
+neutron security-group-rule-create --protocol tcp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 default
 
-source ~/devstack/openrc admin demo
+neutron security-group-rule-create --protocol udp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 default
+neutron security-group-rule-create --protocol icmp --direction ingress --remote-ip-prefix 0.0.0.0/0 default
 
 #
 # locate the private network id
@@ -121,7 +115,7 @@ VDIRECT_URL=http://$VDIRECT_IP:2188
 #
 echo "Waiting for vDirect to start..."
 
-wget -q  $VDIRECT_URL/api
+wget -q  --tries=1 --timeout=2  $VDIRECT_URL/api
 PING_STATUS=$?
 COUNTER=0
 while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 300 ]
@@ -129,7 +123,7 @@ while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 300 ]
   echo "Sleeping for 2 seconds...($COUNTER)"
   sleep 2
   COUNTER=$[COUNTER + 1]
-  wget -q  $VDIRECT_URL/api
+  wget -q  --tries=1 --timeout=2 $VDIRECT_URL/api
   PING_STATUS=$?
 done
 

@@ -54,9 +54,10 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
                     except Exception:
                         break
                 import vdirect_cfg.lib.vdirect_rest_client as VD
-                rest_client = VD.vDirectRESTClient(server='10.0.0.2',
-                                                   user='vDirect',
-                                                   password='radware')
+                cfg = load_config('test.cfg')
+                rest_client = VD.vDirectClient(server=config['vdirect_ip'],
+                                       user=config['vdirect_user'],
+                                       password=config['vdirect_password'])
                 for network in cls.networks:
                     VD.delete_workflow(rest_client, 'l2_l3_' + network['id'])
                     time.sleep(90)
