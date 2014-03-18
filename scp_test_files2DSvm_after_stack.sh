@@ -32,8 +32,8 @@ fi
 
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cp -r ~/scripts/vdirect_cfg/ /opt/stack/tempest/tempest/api/network/'
 
-# copying radware files to Devstack VM 
+# copying radware tests radware_test_load_balancer.py to /opt/stack/tempest/tempest/api/network/
 
-sshpass -p $VM_SSH_PASSWORD scp -r vdirect_cfg/  $VM_SSH_USER@$VM_IP:/opt/stack/tempest/tempest/api/network/
+sshpass -p $VM_SSH_PASSWORD scp tempest/radware_test_load_balancer.py  $VM_SSH_USER@$VM_IP:/opt/stack/tempest/tempest/api/network/
 
 
