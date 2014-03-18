@@ -3,7 +3,7 @@
 source ~/devstack/jobrc
 
 sed -i "s/service_provider=LOADBALANCER:Haproxy/#service_provider=LOADBALANCER:Haproxy/g" /etc/neutron/neutron.conf
-sed -i "s/#service_provider = LOADBALANCER:Radware/service_provider = LOADBALANCER:Radware/g" /etc/neutron/neutron.conf
+sed -i "s/# service_provider = LOADBALANCER:Radware/service_provider = LOADBALANCER:Radware/g" /etc/neutron/neutron.conf
 
 
 sudo echo '[radware]' > /etc/neutron/services.conf
@@ -27,7 +27,6 @@ python /usr/local/bin/neutron-server --config-file /etc/neutron/neutron.conf --c
 
 sleep 2
 
-NEW_PID=`ps -ef | grep neutron | grep server | awk '{ print $2 }'`
+NEW_PID=`ps -ef | grep neutron-server | grep python| awk '{ print $2 }'`
 echo 'New PID: ' $NEW_PID
-
 
