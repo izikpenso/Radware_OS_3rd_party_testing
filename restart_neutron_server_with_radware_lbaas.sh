@@ -18,10 +18,14 @@ echo 'Killing neutron ...PID:' $PID
 # kill it
 kill $PID
 
+sleep 2
 
 # start neutron
 echo 'Restarting...'
 python /usr/local/bin/neutron-server --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/services.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini > ~/q_err.txt 2> ~/q_log.txt &
+
+
+sleep 2
 
 NEW_PID=`ps -ef | grep neutron | grep server | awk '{ print $2 }'`
 echo 'New PID: ' $NEW_PID
