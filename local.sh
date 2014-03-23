@@ -21,13 +21,16 @@ source ~/devstack/jobrc
 # create the Alteon image 
 #
 
-glance image-create --name Alteon-29-0-60-0 --file ~/images/$ALTEON_IMAGE  --disk-format qcow2 --container-format bare --is-public True
+ALTEON_IMAGE_NAME=$(echo $ALTEON_IMAGE_FILE | rev | cut -d. -f2- | rev)
+glance image-create --name ${ALTEON_IMAGE_NAME} --file ~/images/$ALTEON_IMAGE_FILE  --disk-format qcow2 --container-format bare --is-public True
 
 
 #
 # create the vDirect image
 #
-glance image-create --name vDirect-VA-2-20-00 --file ~/images/$VDIRECT_IMAGE --disk-format qcow2 --container-format bare --is-public True
+
+VDIRECT_IMAGE_NAME=$(echo $VDIRECT_IMAGE_FILE | rev | cut -d. -f2- | rev)
+glance image-create --name ${VDIRECT_IMAGE_NAME} --file ~/images/$VDIRECT_IMAGE_FILE --disk-format qcow2 --container-format bare --is-public True
 
 #
 # create admin network called ha-network
@@ -94,7 +97,7 @@ echo "export NETWORK_MANAGEMENT_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack
 # Boot the vDirect
 #
 
-VM_ID=$(nova boot --poll --flavor 'm1.small' --image 'vDirect-VA-2-20-00' vDirectServer --nic net-id=$PRIVATE_NETWORK_ID | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} vDirectServer --nic net-id=$PRIVATE_NETWORK_ID | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 
 #
