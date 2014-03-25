@@ -20,7 +20,7 @@ source $1
 
 PATCH_NAME=$(echo $GERRIT_REFSPEC | sed -e 's/\//_/g')
 
-tar cvzf $PATCH_NAME.tar.gz tempest.log test_load_balancer_log.xml
+tar cvzf $PATCH_NAME.tar.gz tempest.log test_load_balancer_log.xml screen-logs.tar.gz
 
 cp $PATCH_NAME.tar.gz ~/Dropbox/Public/.
 

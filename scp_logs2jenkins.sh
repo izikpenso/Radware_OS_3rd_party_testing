@@ -25,6 +25,8 @@ fi
 
 source $1
 
+tar cvzf screen-logs.tar.gz ~/devstack/logs/
+
 sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/*log* .
 
 
