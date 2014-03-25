@@ -12,7 +12,7 @@ if (( $# != 1 )); then
 fi
 
 #source the resource file that contains all the needed environment variables for script to run.
-echo "will use file $1"
+echo "will use the following resource file - $1"
 source $1
 
 
@@ -41,13 +41,13 @@ sshpass -p $VM_SSH_PASSWORD scp restart_neutron_server_with_radware_lbaas.sh $VM
 sshpass -p $VM_SSH_PASSWORD scp -r vdirect_cfg/  $VM_SSH_USER@$VM_IP:~/scripts/
 
 
-# echoing Alteon and vDirect image name just for fun.
-echo "Alteon image = $ALTEON_IMAGE"
+# echoing Alteon and vDirect imagei file name just for fun.
+echo "Using Alteon image: $ALTEON_IMAGE_FILE"
 
-echo " vDirect image = $VDIRECT_IMAGE"
+echo "Using vDirect image file: $VDIRECT_IMAGE_FILE"
 
 #Downloading Alteon and vDirect images to devstack machine from IMAGE_SERVER_IP
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'mkdir ~/images; cd ~/images/; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$ALTEON_IMAGE"'; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$VDIRECT_IMAGE"''
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'mkdir ~/images; cd ~/images/; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$ALTEON_IMAGE_FILE"'; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$VDIRECT_IMAGE_FILE"''
 
 
 

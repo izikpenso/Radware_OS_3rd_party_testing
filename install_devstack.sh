@@ -24,7 +24,7 @@ if ! which sshpass > /dev/null; then
 fi
 
 #source the resource file that contains all the needed environment variables for script to run.
-echo "will use file $1"
+echo "will use the following resource file - $1"
 source $1
 
 
