@@ -20,10 +20,9 @@ source $1
 
  ~/bin/dropbox.py start
 
-if [ -z "$GERRIT_REFSPEC" ]
-  then 
+if [ -z "$GERRIT_REFSPEC" ]; then 
       LOG_FILE_NAME=$VM_NAME_$timestamp.tar.gz
-  else
+else
       PATCH_NAME=$(echo $GERRIT_REFSPEC | sed -e 's/\//_/g')
       LOG_FILE_NAME=$PATCH_NAME_$timestamp.tar.gz
 fi
