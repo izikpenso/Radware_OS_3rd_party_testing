@@ -30,9 +30,9 @@ else
       LOG_FILE_NAME=$PATCH_NAME_$TIMESTAMP.tar.gz
 fi
 
-tar cvzf $LOG_FILE_NAME.tar.gz tempest.log test_load_balancer_log.xml screen-logs.tar.gz
-cp $LOG_FILE_NAME.tar.gz ~/Dropbox/Public/.
+tar cvzf $LOG_FILE_NAME tempest.log test_load_balancer_log.xml screen-logs.tar.gz
+cp $LOG_FILE_NAME ~/Dropbox/Public/.
 
 echo "Log file name is: $LOG_FILE_NAME"
 
-echo "export LOG_FILE_NAME=$LOG_FILE_NAME.tar.gz" >> $1
+echo "export LOG_FILE_NAME=$LOG_FILE_NAME" >> $1
