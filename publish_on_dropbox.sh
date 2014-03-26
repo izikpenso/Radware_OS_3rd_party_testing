@@ -13,6 +13,8 @@ if (( $# != 1 )); then
 fi
 
 
+timestamp = $(date -d "today" +"%Y%m%d%H%M")
+
 #source the jobrc file that contains all the needed environment variables for script to run. 
 source $1
 
@@ -20,10 +22,12 @@ source $1
 
 if [ -z "$GERRIT_REFSPEC" ]
   then 
-      echo "export LOG_FILE=$VM_NAME.tar.gz" >> $1
+      LOG_FILE_NAME=$VM_NAME_$timestamp.tar.gz
   else
       PATCH_NAME=$(echo $GERRIT_REFSPEC | sed -e 's/\//_/g')
-      tar cvzf $PATCH_NAME.tar.gz tempest.log test_load_balancer_log.xml screen-logs.tar.gz
-      cp $PATCH_NAME.tar.gz ~/Dropbox/Public/.
-      echo "export LOG_FILE=$PATCH_NAME.tar.gz" >> $1
+      LOG_FILE_NAME=$PATCH_NAME_$timestamp.tar.gz
 fi
+
+tar cvzf $LOG_FILE_NAME.tar.gz tempest.log test_load_balancer_log.xml screen-logs.tar.gz
+cp $LOG_FILE_NAME.tar.gz ~/Dropbox/Public/.
+echo "export LOG_FILE_NAME=$LOG_FILE_NAME$timestamp.tar.gz" >> $1
