@@ -53,7 +53,7 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
                         timer = timer-10
                     except Exception:
                         break
-                import vdirect_cfg.lib.vdirect_rest_client as VD
+                import vdirect_cfg.lib.vdirect_client as VD
                 cfg = load_config('test.cfg')
                 rest_client = VD.vDirectClient(server=config['vdirect_ip'],
                                        user=config['vdirect_user'],
