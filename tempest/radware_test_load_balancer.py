@@ -54,7 +54,7 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
                     except Exception:
                         break
                 import vdirect_cfg.lib.vdirect_client as VD
-                cfg = load_config('test.cfg')
+                cfg = VD.load_config('test.cfg')
                 rest_client = VD.vDirectClient(server=config['vdirect_ip'],
                                        user=config['vdirect_user'],
                                        password=config['vdirect_password'])
