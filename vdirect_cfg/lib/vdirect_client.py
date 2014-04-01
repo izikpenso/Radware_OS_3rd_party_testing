@@ -136,6 +136,13 @@ def _rest_wrapper(response, success_codes=[202]):
         return response[RESP_DATA]
 
 
+def load_config(cfg_filename):
+    LOG.debug('Reading Configuration file - ' + cfg_filename)
+    cfg = json.load(open(cfg_filename))
+    LOG.debug(cfg)
+    return cfg
+
+
 def upload_workflow_template(zipFilename, rest_client):
     LOG.debug('Uploading workflow template')
     with open(zipFilename, mode='rb') as file:

@@ -16,13 +16,6 @@ LOG.addHandler(hdlr)
 LOG.setLevel(logging.DEBUG)
 
 
-def load_config(cfg_filename):
-    LOG.debug('Reading Configuration file - ' + cfg_filename)
-    cfg = json.load(open(cfg_filename))
-    LOG.debug(cfg)
-    return cfg
-
-
 def setup_vdirect_opensack_cfg(config):
     try:
         LOG.debug('initialize vDirect client')
@@ -48,9 +41,9 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         LOG.debug('No configuration file was selected,\
                   using default config file.')
-        cfg = load_config('test.cfg')
+        cfg = VD.load_config('test.cfg')
     else:
-        cfg = load_config(sys.argv[1])
+        cfg = VD.load_config(sys.argv[1])
 
 setup_vdirect_opensack_cfg(cfg)
 
