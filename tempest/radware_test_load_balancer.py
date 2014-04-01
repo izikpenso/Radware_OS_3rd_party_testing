@@ -54,7 +54,7 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
                     except Exception:
                         break
                 import vdirect_cfg.lib.vdirect_client as VD
-                cfg = VD.load_config('/home/ubuntu/vdirect_cfg/test.cfg')
+                config = VD.load_config('/home/ubuntu/vdirect_cfg/test.cfg')
                 rest_client = VD.vDirectClient(server=config['vdirect_ip'],
                                        user=config['vdirect_user'],
                                        password=config['vdirect_password'])
@@ -63,4 +63,4 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
                     time.sleep(90)
                     VD.delete_service(rest_client, 'srv_' + network['id'])
                     time.sleep(90)
-        super(base.BaseNetworkTest, cls).tearDownClass()
+        super(base.RadwareLoadBalancerTest, cls).tearDownClass()
