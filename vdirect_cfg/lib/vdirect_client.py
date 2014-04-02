@@ -136,6 +136,34 @@ def _rest_wrapper(response, success_codes=[202]):
         return response[RESP_DATA]
 
 
+def _wait_for_resource_deletion (token, resource_name, rest_client):
+    start_time = int(time.time())
+    while True:
+        result = rest_client.call('GET', token,
+                                   None, None)
+        completed = result[RESP_DATA]['complete']
+        reason = result[RESP_REASON],
+        description = result[RESP_STR]
+ 
+        if completed:
+            success = result[RESP_DATA]['success']
+            if success:
+                return
+            else:
+                if reason or description:
+                    msg = 'Reason:%s. Description:%s' % (reason, description)
+                else:
+                    msg = "unknown"
+                error_params = {"resource_name": resource_name, "msg": msg}
+                LOG.error(_('Failed to delete %(resource_name)s. Reason: %(msg)s'),
+                          error_params)
+                raise Exception ()
+
+        if int(time.time()) - start_time >= 120:
+            raise exceptions.TimeoutException
+        time.sleep(5)
+
+
 def load_config(cfg_filename):
     LOG.debug('Reading Configuration file - ' + cfg_filename)
     cfg = json.load(open(cfg_filename))
@@ -156,15 +184,20 @@ def upload_workflow_template(zipFilename, rest_client):
 
 def delete_workflow(rest_client, workflow_name):
     LOG.debug('Deleteing workflow')
-    return _rest_wrapper(rest_client.call('DELETE',
-                                          '/api/workflow/%s' % workflow_name,
-                                           DELETE_HEADER, None), [202])
+    res = rest_client.call('DELETE',
+                           '/api/workflow/%s' % workflow_name,
+                           DELETE_HEADER, None)
+    if res[RESP_STATUS] != 404:
+        _wait_for_resource_deletion(res[RESP_DATA]['uri'], workflow_name, rest_client)
+    
 
 def delete_service(rest_client, service_name):
     LOG.debug('Deleteing workflow')
-    return _rest_wrapper(rest_client.call('DELETE',
-                                          '/api/service/%s' % service_name,
-                                          DELETE_HEADER, None), [202])
+    res = rest_client.call('DELETE',
+                            '/api/service/%s' % service_name,
+                            DELETE_HEADER, None)
+    if res[RESP_STATUS] != 404:
+        _wait_for_resource_deletion(res[RESP_DATA]['uri'], service_name, rest_client)
 
 def create_openstack_container(rest_client, config):
     LOG.debug('Createing Openstack container on vDirect')
