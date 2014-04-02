@@ -41,26 +41,16 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
                         timer = timer-10
                     except Exception:
                         break
-        # Clean up pools
-        for pool in cls.pools:
-            cls.client.delete_pool(pool['id'])
-            if (pool['provider'] == 'radware'):
-                timer = 1000
-                while timer > 0:
-                    try:
-                        cls.client.show_pool(pool['id'])
-                        time.sleep(10)
-                        timer = timer-10
-                    except Exception:
-                        break
-                import vdirect_cfg.lib.vdirect_client as VD
-                config = VD.load_config('/home/ubuntu/scripts/vdirect_cfg/test.cfg')
-                rest_client = VD.vDirectClient(server=config['vdirect_ip'],
+
+        cls.vips = []
+
+        import vdirect_cfg.lib.vdirect_client as VD
+        config = VD.load_config('/home/ubuntu/scripts/vdirect_cfg/test.cfg')
+        rest_client = VD.vDirectClient(server=config['vdirect_ip'],
                                        user=config['vdirect_user'],
                                        password=config['vdirect_password'])
-                for network in cls.networks:
-                    VD.delete_workflow(rest_client, 'l2_l3_' + network['id'])
-                    time.sleep(90)
-                    VD.delete_service(rest_client, 'srv_' + network['id'])
-                    time.sleep(90)
+        for network in cls.networks:
+            VD.delete_workflow(rest_client, 'l2_l3_' + network['id'])
+            VD.delete_service(rest_client, 'srv_' + network['id'])
+
         super(RadwareLoadBalancerTest, cls).tearDownClass()
