@@ -63,4 +63,4 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
                     time.sleep(90)
                     VD.delete_service(rest_client, 'srv_' + network['id'])
                     time.sleep(90)
-        super(base.RadwareLoadBalancerTest, cls).tearDownClass()
+        super(RadwareLoadBalancerTest, cls).tearDownClass()
