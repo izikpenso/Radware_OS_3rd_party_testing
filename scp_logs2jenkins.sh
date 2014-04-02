@@ -31,6 +31,6 @@ sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_I
 
 sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/*log* .
 
-sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/jobrc jobrc_modified
+sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/devstack/jobrc jobrc_modified
 
 
