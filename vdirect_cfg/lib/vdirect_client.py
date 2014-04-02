@@ -159,9 +159,9 @@ def _wait_for_resource_deletion (token, resource_name, rest_client):
                           error_params)
                 raise Exception ()
 
-        if int(time.time()) - start_time >= 120:
+        if int(time.time()) - start_time >= 600:
             raise exceptions.TimeoutException
-        time.sleep(5)
+        time.sleep(15)
 
 
 def load_config(cfg_filename):
