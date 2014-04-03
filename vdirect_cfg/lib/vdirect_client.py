@@ -155,7 +155,7 @@ def _wait_for_resource_deletion (token, resource_name, rest_client):
                 else:
                     msg = "unknown"
                 error_params = {"resource_name": resource_name, "msg": msg}
-                LOG.error(_('Failed to delete %(resource_name)s. Reason: %(msg)s'),
+                LOG.error('Failed to delete %(resource_name)s. Reason: %(msg)s',
                           error_params)
                 raise Exception ()
 
