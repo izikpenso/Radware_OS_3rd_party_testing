@@ -37,6 +37,12 @@ WORKFLOW_TEMPLATE_HEADER = {'Content-Type':
                             'application/x-zip-compressed'}
 DELETE_HEADER = {'Content-Type':
                  'application/vnd.com.radware.vdirect.status+json'}
+VDIRECT_LOG_HEADER = {'Content-Type':
+                      'text/plain'}
+WORKFLOW_LIST_HEADER = {'Content-Type':
+                        'application/vnd.com.radware.vdirect.workflow-list+json'}
+SERVICE_LIST_HEADER = {'Content-Type':
+                       'application/vnd.com.radware.vdirect.adc-service-list+json'}
 
 
 
@@ -245,4 +251,37 @@ def create_resource_pool(rest_client, config):
                          '/api/resource/containerPool',
                          config['resource_pool_params'], RESOURCE_POOL_HEADER),
                          [201])
+
+def get_workflow_history(rest_client, workflow_name):
+    LOG.debug('Getting workflow history for - ' + workflow_name)
+    return  _rest_wrapper(rest_client.call('GET',
+                        '/api/workflow/%s/history?format=text&debug=false' % workflow_name,
+                        None, VDIRECT_LOG_HEADER),
+                        [200])
+
+
+def get_service_history(rest_client, service_name):
+    LOG.debug('Getting service history for - ' + service_name)
+    return _rest_wrapper(rest_client.call('GET',
+                         '/api/service/%s/history?format=text' % service_name,
+                         None, VDIRECT_LOG_HEADER),
+                         [200])
+
+
+def list_workflows(rest_client):
+    LOG.debug('Getting workflow list')
+    return _rest_wrapper(rest_client.call('GET',
+                         '/api/workflow?includeDeleted=true',
+                         None, WORKFLOW_LIST_HEADER),
+                         [200])
+
+
+def list_services(rest_client):
+    LOG.debug('Getting service list')
+    return _rest_wrapper(rest_client.call('GET',
+                         '/api/service?includeDeleted=true',
+                         None, SERVICE_LIST_HEADER),
+                         [200])
+
+
 
