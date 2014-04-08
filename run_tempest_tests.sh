@@ -31,7 +31,7 @@ source $1
 
 # Editing - build_timeout, build_interval, allow_tenant_isolation = False
 
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/#build_timeout=300/build_timeout=600/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/#build_interval=10/build_interval=10/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/allow_tenant_isolation = True/allow_tenant_isolation = False/g" /opt/stack/tempest/etc/tempest.conf allow_tenant_isolation = False'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/#build_timeout=300/build_timeout=1200/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/#build_interval=10/build_interval=10/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/allow_tenant_isolation = True/allow_tenant_isolation = False/g" /opt/stack/tempest/etc/tempest.conf allow_tenant_isolation = False'
 
 #Runnuig tempest test and save log
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'nosetests -s -v /opt/stack/tempest/tempest/api/network/radware_test_load_balancer.py --with-xunit --xunit-file=test_load_balancer_log.xml'
