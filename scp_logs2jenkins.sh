@@ -25,6 +25,9 @@ fi
 
 source $1
 
+# Get vDirect history log
+
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'python ~/scripts/vdirect_cfg/vdirect_get_history.py.py ~/scripts/vdirect_cfg/test.cfg'
 
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'tar cvzf screen-logs.tar.gz ~/devstack/logs/;'
 
