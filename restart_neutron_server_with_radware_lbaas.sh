@@ -20,6 +20,17 @@ kill $PID
 
 sleep 2
 
+
+# Cerry picking the latest radware driver
+
+cd /opt/stack/neutron 
+
+git fetch https://review.openstack.org/openstack/neutron refs/changes/09/69009/10 && git cherry-pick FETCH_HEAD
+
+
+sleep 2
+
+
 # start neutron
 echo 'Restarting...'
 python /usr/local/bin/neutron-server --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/services.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini > ~/q_err.txt 2> ~/q_log.txt &
