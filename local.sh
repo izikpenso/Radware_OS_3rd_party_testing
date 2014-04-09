@@ -79,10 +79,9 @@ done
 
 #
 # modify sec groups
-neutron security-group-rule-create --protocol tcp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 default
 
-neutron security-group-rule-create --protocol udp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 default
-neutron security-group-rule-create --protocol icmp --direction ingress --remote-ip-prefix 0.0.0.0/0 default
+neutron security-group-rule-create --direction ingress --remote-ip-prefix 0.0.0.0/0 default
+
 
 #
 # locate the private network id
