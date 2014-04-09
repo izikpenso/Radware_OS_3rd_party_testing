@@ -80,6 +80,15 @@ neutron security-group-rule-create --direction ingress --remote-ip-prefix 0.0.0.
 source ~/devstack/openrc admin demo
 
 #
+# make the networks shared
+#
+declare -a NETWORKS=('private' 'server-network' 'ha-network');
+for network in "${NETWORKS[@]}"
+do
+  neutron net-update "${network}" --shared
+done
+
+#
 # locate the private network id
 #
 
