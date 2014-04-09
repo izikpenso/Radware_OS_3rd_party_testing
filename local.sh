@@ -66,22 +66,18 @@ neutron subnet-create --name server-subnet --gateway 192.168.200.1 --allocation_
 #
 # change project to demo
 #
-source ~/devstack/openrc admin demo
-
-#
-# make the networks shared
-#
-declare -a NETWORKS=('private' 'server-network' 'ha-network');
-for network in "${NETWORKS[@]}"
-do
-  neutron net-update "${network}" --shared
-done
+source ~/devstack/openrc demo demo
 
 #
 # modify sec groups
 
 neutron security-group-rule-create --direction ingress --remote-ip-prefix 0.0.0.0/0 default
 
+
+#
+# change project to demo
+#
+source ~/devstack/openrc admin demo
 
 #
 # locate the private network id
