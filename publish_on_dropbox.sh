@@ -28,7 +28,8 @@ fi
 
 cp /var/lib/jenkins/jobs/$JOB_NAME/builds/$BUILD_NUMBER/log console.log
 
-tar cvzf $LOG_FILE_NAME tempest.log test_load_balancer_log.xml screen-logs.tar.gz console.log jobrc_modified q_log.txt
+tar cvzf $LOG_FILE_NAME tempest.log test_load_balancer_log.xml screen-logs.tar.gz console.log jobrc_modified q_log.txt stack.sh.log localrc vdirect_history.log
+
 cp $LOG_FILE_NAME ~/Dropbox/Public/.
 
 echo "Log file name is: $LOG_FILE_NAME"
