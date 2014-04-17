@@ -1,6 +1,5 @@
 #!/bin/bash
 
-GERRIT_USER="radware3rdpartytesting"
 GERRIT_JSON_FILE="gerrit.json"
 CURRENT_TIMESTAMP=$(date +%s)
 RECHECK_NO_BUG="*recheck bug*"
