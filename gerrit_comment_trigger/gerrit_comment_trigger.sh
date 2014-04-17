@@ -25,6 +25,6 @@ if [ $GERRIT_EVENT_TYPE="comment-added" ]; then
                         fi
                 fi
         done
-        echo "export TRIGGER_FLAG="$TRIGGER_FLAG" >> $1
+        echo "export TRIGGER_FLAG=$TRIGGER_FLAG" >> $1
 fi
 
