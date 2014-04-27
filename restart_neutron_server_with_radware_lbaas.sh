@@ -23,12 +23,12 @@ sleep 2
 
 # Cerry picking the latest radware driver
 
-cd /opt/stack/neutron 
+#cd /opt/stack/neutron 
 
-git fetch https://review.openstack.org/openstack/neutron refs/changes/09/69009/10 && git cherry-pick FETCH_HEAD
+#git fetch https://review.openstack.org/openstack/neutron refs/changes/09/69009/10 && git cherry-pick FETCH_HEAD
 
 
-sleep 2
+#sleep 2
 
 
 # start neutron
