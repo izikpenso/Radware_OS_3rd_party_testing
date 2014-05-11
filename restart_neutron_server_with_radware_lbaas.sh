@@ -2,6 +2,12 @@
 
 source ~/devstack/jobrc
 
+
+if [ -z "$HA_PAIR_FLAG" ]; then
+	HA_PAIR_FLAG=False
+fi
+
+
 sed -i "s/service_provider=LOADBALANCER:Haproxy/#service_provider=LOADBALANCER:Haproxy/g" /etc/neutron/neutron.conf
 sed -i "s/# service_provider = LOADBALANCER:Radware/service_provider = LOADBALANCER:Radware/g" /etc/neutron/neutron.conf
 
@@ -9,7 +15,7 @@ sed -i "s/# service_provider = LOADBALANCER:Radware/service_provider = LOADBALAN
 sudo echo '[radware]' > /etc/neutron/services.conf
 
 echo "vdirect_address=$VDIRECT_IP" | sudo tee -a /etc/neutron/services.conf
-
+echo "service_ha_pair=$HA_PAIR_FLAG" | sudo tee -a /etc/neutron/services.conf
 
 # stop neutron
 PID=`ps -ef | grep neutron-server | grep python | awk '{ print $2 }'`
@@ -19,17 +25,6 @@ echo 'Killing neutron ...PID:' $PID
 kill $PID
 
 sleep 2
-
-
-# Cerry picking the latest radware driver
-
-#cd /opt/stack/neutron 
-
-#git fetch https://review.openstack.org/openstack/neutron refs/changes/09/69009/10 && git cherry-pick FETCH_HEAD
-
-
-#sleep 2
-
 
 # start neutron
 echo 'Restarting...'
