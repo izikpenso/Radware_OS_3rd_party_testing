@@ -126,7 +126,6 @@ VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} ${VDI
 VDIRECT_FLOATING_IP=$(neutron floatingip-create --tenant-id ${ALTEON_VA_PROJECT_ID} ${RAD_ROUTER_1_PUB} | grep " floating_ip_address " | get_field 2)
 nova add-floating-ip ${VDIRECT_INSTANCE_NAME} ${VDIRECT_FLOATING_IP}
 
-#VDIRECT_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 VDIRECT_IP=${VDIRECT_FLOATING_IP}
 #
 # Adding the vDirect IP  to resource file so it can be used later
@@ -168,7 +167,9 @@ source ~/devstack/openrc admin demo
 
 PRIVATE_NETWORK_ID=`neutron net-show private -f shell -c id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
 echo "PRIVATE_NETWORK_ID = $PRIVATE_NETWORK_ID"
-echo "export SERVER_MANAGEMENT_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+
+SERVER_NETWORK_ID=$PRIVATE_NETWORK_ID
+echo "export SERVER_NETWORK_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 #
 # Create Clinet_net in Demo
@@ -201,7 +202,7 @@ neutron security-group-rule-create --protocol icmp --direction ingress --remote-
 # Upload webServer image in Demo , this part is relevant only for demos and POCs
 #
 
-WEBSERVER_IMAGE_NAME="WEB__SERVER_IMAGE"
+WEBSERVER_IMAGE_NAME="WEB_SERVER_IMAGE"
 glance image-create --name ${WEBSERVER_IMAGE_NAME} --file ~/images/$WEBSERVER_IMAGE_FILE  --disk-format qcow2 --container-format bare
 
 
@@ -209,5 +210,10 @@ glance image-create --name ${WEBSERVER_IMAGE_NAME} --file ~/images/$WEBSERVER_IM
 # Launch 2 Web Servers , this part is relevant only for demos and POCs
 #
 
-VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer --nic net-id=${SERVER_MANAGEMENT_ID} --security-groups default | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer1 --nic net-id=${SERVER_NETWORK_ID} --security-groups default | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
+WEB_SRV1_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
+
+VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer2 --nic net-id=${SERVER_NETWORK_ID} --security-groups default | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+
+WEB_SRV2_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
