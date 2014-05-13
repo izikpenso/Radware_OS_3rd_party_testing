@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+source ~/devstack/openrc admin demo
+
+POOL_NAME="pool_1_leg"
+VIP_NAME="vip_1_leg"
+
+SERVER_SUBNET_ID=$(neutron net-list | grep ${SERVER_NETWORK_ID} | get_field 3 | cut -d " " -f 1)
+
+echo "export SERVER_SUBNET_ID=$SERVER_SUBNET_ID" | sudo tee -a ~/devstack/jobrc
+
+neutron lb-pool-create --name $POOL_NAME --lb-method ROUND_ROBIN --protocol HTTP --subnet-id ${SERVER_SUBNET_ID}
+
+HM_ID=$(neutron lb-healthmonitor-create --delay 3 --max-retries 3 --timeout 3 --type HTTP | grep ' id ' | get_field 2)
+
+echo "export HM_ID=$HM_ID" | sudo tee -a ~/devstack/jobrc
+
+neutron lb-healthmonitor-associate ${HM_ID} ${POOL_NAME}
+
+neutron lb-member-create --address ${WEB_SRV1_IP} --protocol-port 80 ${POOL_NAME}
+
+neutron lb-member-create --address ${WEB_SRV2_IP} --protocol-port 80 ${POOL_NAME}
+
+VIP_ID=$(neutron lb-vip-create --name ${VIP_NAME} --protocol-port 80 --protocol HTTP --subnet-id ${SERVER_SUBNET_ID} ${POOL_NAME} | grep ' id ' | get_field 2)
+
+echo "export VIP_ID=$VIP_ID" | sudo tee -a ~/devstack/jobrc
+
+VIP_PORT_ID=$(neutron lb-vip-show $VIP_ID | grep ' port_id ' | get_field 2)
+
+echo "export VIP_PORT_ID=$VIP_PORT_ID" | sudo tee -a ~/devstack/jobrc
+
+VIP_IP=$(neutron lb-vip-show ${VIP_ID} | grep ' address ' | get_field 2)
+
+echo "export VIP_IP=$VIP_IP" | sudo tee -a ~/devstack/jobrc
+
+VIP_FLOATING_IP_ID=$(neutron floatingip-create public | grep ' id ' | get_field 2)
+
+echo "export VIP_FLOATING_IP_ID=$VIP_FLOATING_IP_ID" | sudo tee -a ~/devstack/jobrc
+
+VIP_FLOATING_IP=$(neutron floatingip-show ${VIP_FLOATING_IP_ID} | grep ' floating_ip_address ' | get_field 2)
+
+echo "export VIP_FLOATING_IP=$VIP_FLOATING_IP" | sudo tee -a ~/devstack/jobrc
+
+neutron floatingip-associate ${VIP_FLOATING_IP_ID} ${VIP_PORT_ID}
+
