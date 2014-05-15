@@ -38,7 +38,7 @@ if [ -z "$LOCAL_SH_FILE" ]; then
         LOCAL_SH_FILE='local.sh'
 fi
 
-sshpass -p $VM_SSH_PASSWORD scp $LOCAL_SH_FILE $VM_SSH_USER@$VM_IP:~/devstack/.
+sshpass -p $VM_SSH_PASSWORD scp $LOCAL_SH_FILE $VM_SSH_USER@$VM_IP:~/devstack/local.sh
 
 sshpass -p $VM_SSH_PASSWORD scp edit_vdirect_conf_file.sh $VM_SSH_USER@$VM_IP:~/scripts/.
 
