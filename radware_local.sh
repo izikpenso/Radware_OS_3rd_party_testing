@@ -94,16 +94,12 @@ neutron subnet-create --name dummy-subnet --gateway 192.168.199.1 --allocation_p
 # Createing vdirectva sec group
 
 neutron security-group-create --tenant-id ${ALTEON_VA_PROJECT_ID} vdirectva --description vdirectva
-neutron security-group-rule-create --protocol tcp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 vdirectva
-neutron security-group-rule-create --protocol udp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 vdirectva
-neutron security-group-rule-create --protocol icmp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 255 vdirectva
+neutron security-group-rule-create --remote-ip-prefix 0.0.0.0/0 --direction ingress vdirectva
 
 # Createing alteonva sec group
 
 neutron security-group-create --tenant-id ${ALTEON_VA_PROJECT_ID} alteonva --description alteonva
-neutron security-group-rule-create --protocol tcp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 alteonva
-neutron security-group-rule-create --protocol udp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 alteonva
-neutron security-group-rule-create --protocol icmp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 255 alteonva
+neutron security-group-rule-create --remote-ip-prefix 0.0.0.0/0 --direction ingress alteonva
 
 # Create Router in ALTEON_VA_PROJECT_NAME
 
@@ -155,7 +151,7 @@ if [ -n "$VDIRECT_IP" ]; then
  		echo "vDirect is up and running."
  		chmod a+x ~/scripts/edit_vdirect_conf_file.sh
  		~/scripts/./edit_vdirect_conf_file.sh
- 		python ~/scripts/vdirect_cfg/vdirect_lbaas_cfg.py ~/scripts/vdirect_cfg/test.cfg
+ 		python ~/scripts/vdirect_cfg/vdirect_lbaas_cfg.py ~/scripts/vdirect_cfg/radware_test.cfg
 	fi
 fi
 
@@ -192,10 +188,7 @@ neutron router-interface-add ${DEFAULT_ROUTER_ID} ${CLIENT_SUBNET_ID}
 #
 # Modify defalt security group to allow all
 #
-neutron security-group-rule-create --protocol tcp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 default
-neutron security-group-rule-create --protocol udp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 65535 default
-neutron security-group-rule-create --protocol icmp --direction ingress --remote-ip-prefix 0.0.0.0/0 --port-range-min 1 --port-range-max 255 default
-
+neutron security-group-rule-create --remote-ip-prefix 0.0.0.0/0 --direction ingress default
 
 
 #
@@ -214,6 +207,10 @@ VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} Web
 
 WEB_SRV1_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
+echo "export WEB_SRV1_IP=$WEB_SRV1_IP" | sudo tee -a ~/devstack/jobrc
+
 VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer2 --nic net-id=${SERVER_NETWORK_ID} --security-groups default | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 WEB_SRV2_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
+
+echo "export WEB_SRV2_IP=$WEB_SRV2_IP" | sudo tee -a ~/devstack/jobrc
