@@ -149,8 +149,7 @@ if [ -n "$VDIRECT_IP" ]; then
  		echo "ERROR:Could not connect to vDirect after waiting 5 minutes "
 	else
  		echo "vDirect is up and running."
- 		chmod a+x ~/scripts/edit_vdirect_conf_file.sh
- 		~/scripts/./edit_vdirect_conf_file.sh
+ 		~/scripts/./edit_vdirect_conf_file.sh ~/scripts/vdirect_cfg/radware_test.cfg
  		python ~/scripts/vdirect_cfg/vdirect_lbaas_cfg.py ~/scripts/vdirect_cfg/radware_test.cfg
 	fi
 fi

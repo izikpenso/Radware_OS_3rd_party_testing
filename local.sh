@@ -139,8 +139,7 @@ if [ $PING_STATUS -ne 0 ]; then
  
 else
  echo "vDirect is up and running."
- chmod a+x ~/scripts/edit_vdirect_conf_file.sh
- ~/scripts/./edit_vdirect_conf_file.sh
+ ~/scripts/./edit_vdirect_conf_file.sh ~/scripts/vdirect_cfg/test.cfg
  python ~/scripts/vdirect_cfg/vdirect_lbaas_cfg.py ~/scripts/vdirect_cfg/test.cfg
  
 fi
