@@ -47,7 +47,7 @@ export VM_IP=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking 
 ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP 
 
 #Adding the VM hostname to the /etc/hosts file on the VM itself. || true  doesn't fail if error.
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo '"$VM_IP"' '"$VM_NAME"'.'"$VM_DOMAIN"' '"$VM_NAME"' | sudo tee -a /etc/hosts || true'
+sshpass -p $VM_SSH_PASSWORD ssh -v [[[[[[[[-o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo '"$VM_IP"' '"$VM_NAME"'.'"$VM_DOMAIN"' '"$VM_NAME"' | sudo tee -a /etc/hosts || true'
 
 # Adding VM_IP to resource file, so we can use it later.
 echo "export VM_IP=$VM_IP" >> $1
