@@ -184,10 +184,10 @@ neutron router-interface-add ${DEFAULT_ROUTER_ID} ${CLIENT_SUBNET_ID}
 
 
 #
-# Modify defalt security group to allow all
+# Create sg_webserver security group to allow all
 #
-neutron security-group-rule-create --remote-ip-prefix 0.0.0.0/0 --direction ingress default
-
+neutron security-group-create sg_webserver --description sg_webserver
+neutron security-group-rule-create --remote-ip-prefix 0.0.0.0/0 --direction ingress sg_webserver
 
 #
 # Upload webServer image in Demo , this part is relevant only for demos and POCs
@@ -201,13 +201,13 @@ glance image-create --name ${WEBSERVER_IMAGE_NAME} --file ~/images/$WEBSERVER_IM
 # Launch 2 Web Servers , this part is relevant only for demos and POCs
 #
 
-VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer1 --nic net-id=${SERVER_NETWORK_ID} --security-groups default | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer1 --nic net-id=${SERVER_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 WEB_SRV1_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
 echo "export WEB_SRV1_IP=$WEB_SRV1_IP" | sudo tee -a ~/devstack/jobrc
 
-VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer2 --nic net-id=${SERVER_NETWORK_ID} --security-groups default | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer2 --nic net-id=${SERVER_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 WEB_SRV2_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
