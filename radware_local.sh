@@ -23,7 +23,6 @@ RAD_ROUTER_1_PUB=public
 VDIRECT_INSTANCE_NAME=vDirectVA
 ALTEON_MGMT_NETWORK_NAME=alteon-mgmt-net
 ALTEON_MGMT_SUBNET_NAME=alteon-mgmt-subnet
-WEBSERVER_IMAGE_FILE=web-image.qcow2
 keystone tenant-create --name ${ALTEON_VA_PROJECT_NAME}
 ALTEON_VA_PROJECT_ID=$(keystone tenant-list | grep " ${ALTEON_VA_PROJECT_NAME} " | get_field 1)
 keystone user-create --name ${ALTEON_LBAAS_ADMIN_NAME} --tenant ${ALTEON_VA_PROJECT_ID} --pass ${ALTEON_LBAAS_ADMIN_PASS} 
