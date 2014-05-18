@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+
+source $1
+
 source ~/devstack/openrc admin demo
 
 if [ -n "$VIP_FLOATING_IP" ]; then
@@ -18,5 +21,7 @@ if [ -n "$VIP_FLOATING_IP" ]; then
         if [ $PING_STATUS -ne 0 ]; then
                 echo "ERROR:Could not connect to VIP - $VIP_FLOATING_IP after waiting 5 minutes "
                 exit 1
+        else
+                echo "** VIP responded successfully. **"
         fi
 fi
