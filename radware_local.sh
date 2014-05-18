@@ -53,13 +53,13 @@ glance image-create --name ${VDIRECT_IMAGE_NAME} --file ~/images/$VDIRECT_IMAGE_
 # 1. create network and subnet called alteon-mgmt in ALTEON_VA_PROJECT_NAME
 #
 
-ALTEON_MGMT_NETWORK_ID=`neutron net-create ${ALTEON_MGMT_NETWORK_NAME} -f shell -c id | grep id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
+NETWORK_MANAGEMENT_ID=`neutron net-create ${ALTEON_MGMT_NETWORK_NAME} -f shell -c id | grep id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
 
-# Adding new netowrk id to resource file so it can be used later
-echo "export ALTEON_MGMT_NETWORK_ID=$ALTEON_MGMT_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+# Adding new netowrk id to resource file so it can be used later 
+echo "export NETWORK_MANAGEMENT_ID=$NETWORK_MANAGEMENT_ID" | sudo tee -a ~/devstack/jobrc
 
 # create subnet to alteon-mgmt on 192.168.155.0 255.255.255.0 192.168.155.1 with allocation pool of 192.168.155.100, 192.168.155.199
-neutron subnet-create --name ${ALTEON_MGMT_SUBNET_NAME} --gateway 192.168.155.1 --allocation_pool start=192.168.155.100,end=192.168.155.199 $ALTEON_MGMT_NETWORK_ID 192.168.155.0/24
+neutron subnet-create --name ${ALTEON_MGMT_SUBNET_NAME} --gateway 192.168.155.1 --allocation_pool start=192.168.155.100,end=192.168.155.199 $NETWORK_MANAGEMENT_ID 192.168.155.0/24
 
 #
 # 2. create network and subnet  called ha-network in ALTEON_VA_PROJECT_NAME
@@ -81,7 +81,7 @@ neutron subnet-create --name ha-subnet --gateway 192.168.100.1 --allocation_pool
 DUMMY_NETWORK_ID=`neutron net-create dummy-network -f shell -c id | grep id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
 
 # Adding new netowrk id to resource file so it can be used later
-echo "export DUMMY_NETWORK_ID=$DUMMY_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+echo "export SERVER_NETWORK_ID=$DUMMY_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 # create subnet to dummy_network on 192.168.199.0 255.255.255.0 192.168.199.1 with allocation pool of 192.168.199.100, 192.168.199.199
 neutron subnet-create --name dummy-subnet --gateway 192.168.199.1 --allocation_pool start=192.168.199.100,end=192.168.199.199 $DUMMY_NETWORK_ID 192.168.199.0/24
@@ -112,7 +112,7 @@ neutron router-interface-add ${RAD_ROUTER_1_ID} ${RAD_ROUTER_1_PRI_ID}
 # Boot the vDirect
 #
 
-VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} ${VDIRECT_INSTANCE_NAME} --nic net-id=${ALTEON_MGMT_NETWORK_ID} --security-groups vdirectva | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} ${VDIRECT_INSTANCE_NAME} --nic net-id=${NETWORK_MANAGEMENT_ID} --security-groups vdirectva | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 #
 # setting floating IP to vDirect VA
@@ -160,10 +160,7 @@ source ~/devstack/openrc admin demo
 #
 
 PRIVATE_NETWORK_ID=`neutron net-show private -f shell -c id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
-echo "PRIVATE_NETWORK_ID = $PRIVATE_NETWORK_ID"
-
-SERVER_NETWORK_ID=$PRIVATE_NETWORK_ID
-echo "export SERVER_NETWORK_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+echo "PRIVATE_NETWORK_ID = $PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 #
 # Create Clinet_net in Demo
@@ -201,13 +198,13 @@ glance image-create --name ${WEBSERVER_IMAGE_NAME} --file ~/images/$WEBSERVER_IM
 # Launch 2 Web Servers , this part is relevant only for demos and POCs
 #
 
-VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer1 --nic net-id=${SERVER_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer1 --nic net-id=${PRIVATE_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 WEB_SRV1_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
 echo "export WEB_SRV1_IP=$WEB_SRV1_IP" | sudo tee -a ~/devstack/jobrc
 
-VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer2 --nic net-id=${SERVER_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer2 --nic net-id=${PRIVATE_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 WEB_SRV2_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
