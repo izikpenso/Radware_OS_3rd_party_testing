@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+
+source ~/devstack/jobrc
+
 source ~/devstack/openrc admin demo
 
 POOL_NAME="pool_2_leg"
