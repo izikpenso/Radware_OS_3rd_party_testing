@@ -160,7 +160,7 @@ source ~/devstack/openrc admin demo
 #
 
 PRIVATE_NETWORK_ID=`neutron net-show private -f shell -c id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
-echo "PRIVATE_NETWORK_ID = $PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+echo "export PRIVATE_NETWORK_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 #
 # Create Clinet_net in Demo
