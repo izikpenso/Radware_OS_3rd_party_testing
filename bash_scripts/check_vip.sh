@@ -6,7 +6,7 @@ source $1
 source ~/devstack/openrc admin demo
 
 if [ -n "$VIP_FLOATING_IP" ]; then
-        echo "Waiting for VIP to respond..."
+        echo "Waiting for VIP - $VIP_FLOATING_IP to respond..."
         wget -q  --tries=1 --timeout=2 $VIP_FLOATING_IP
         PING_STATUS=$?
         COUNTER=0
