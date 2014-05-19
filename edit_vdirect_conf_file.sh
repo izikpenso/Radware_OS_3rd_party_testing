@@ -6,6 +6,9 @@ source ~/devstack/jobrc
 
 CFG_FILE=$1
 
+echo "export CFG_FILE=$CFG_FILE" | sudo tee -a ~/devstack/jobrc
+
+
 ALTEON_IMAGE_NAME=$(echo $ALTEON_IMAGE_FILE | rev | cut -d. -f2- | rev)
 
 ALTEON_VERSION=$(echo $ALTEON_IMAGE_NAME | cut -d "-" --complement -s -f1)
