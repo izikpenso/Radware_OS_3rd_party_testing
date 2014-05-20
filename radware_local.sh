@@ -127,7 +127,7 @@ VDIRECT_IP=${VDIRECT_FLOATING_IP}
 #
 echo "export VDIRECT_IP=$VDIRECT_IP" | sudo tee -a ~/devstack/jobrc
 
-if [ -n "$VDIRECT_IP" ] && [ $HA_PAIR_FLAG -eq 'True' ] && [ $MULTINODE -eq 'False' ]; then
+if [ -n "$VDIRECT_IP" ] && [ $HA_PAIR_FLAG = 'True' ] && [ $MULTINODE = 'False' ]; then
         #
         # wait for vDirect SSH to be up and running
         #
@@ -147,7 +147,7 @@ if [ -n "$VDIRECT_IP" ] && [ $HA_PAIR_FLAG -eq 'True' ] && [ $MULTINODE -eq 'Fal
                 echo "ERROR:Could not connect to vDirect after waiting 5 minutes "
         else
                 echo "vDirect SSH is up and running."
-                sshpass -p 'radware' ssh -o "StrictHostKeyChecking no" root@$VDIRECT_IP 'echo "container.openstack.useServerGroup=false" | sudo tee -a /root/radware_vdirect/configuration.properties'
+                sshpass -p 'radware' ssh -o "StrictHostKeyChecking no" root@$VDIRECT_IP 'echo "container.openstack.useServerGroup=false" | tee -a /root/radware_vdirect/configuration.properties'
                 sshpass -p 'radware' ssh -o "StrictHostKeyChecking no" root@$VDIRECT_IP 'reboot'
         fi
 fi
