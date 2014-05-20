@@ -127,16 +127,42 @@ VDIRECT_IP=${VDIRECT_FLOATING_IP}
 #
 echo "export VDIRECT_IP=$VDIRECT_IP" | sudo tee -a ~/devstack/jobrc
 
+if [ -n "$VDIRECT_IP" ] && [ $HA_PAIR_FLAG -eq 'True'] && [ $MULTINODE -eq 'False']; then
+        #
+        # wait for vDirect SSH to be up and running
+        #
+        echo "Waiting for vDirect SSH to start..."
+        sshpass -p 'radware' ssh -o "StrictHostKeyChecking no" root@$VDIRECT_IP 'exit'
+        SSH_STATUS=$?
+        COUNTER=0
+        while [ $SSH_STATUS -ne 0 ] && [ $COUNTER -lt 300 ]
+        do
+                echo "Sleeping for 2 seconds...($COUNTER)"
+                sleep 2
+                COUNTER=$[COUNTER + 1]
+                sshpass -p 'radware' ssh -o "StrictHostKeyChecking no" root@$VDIRECT_IP 'exit'
+                SSH_STATUS=$?
+        done
+        if [ $SSH_STATUS -ne 0 ]; then
+                echo "ERROR:Could not connect to vDirect after waiting 5 minutes "
+        else
+                echo "vDirect SSH is up and running."
+                sshpass -p 'radware' ssh -o "StrictHostKeyChecking no" root@$VDIRECT_IP 'echo "container.openstack.useServerGroup=false" | sudo tee -a /root/radware_vdirect/configuration.properties'
+                sshpass -p 'radware' ssh -o "StrictHostKeyChecking no" root@$VDIRECT_IP 'reboot'
+        fi
+fi
+
+
 if [ -n "$VDIRECT_IP" ]; then
 	VDIRECT_URL=http://$VDIRECT_IP:2188
 	#
-	# wait for vDirect to be up and running
+	# wait for vDirect API to be up and running
 	#
 	echo "Waiting for vDirect to start..."
 	wget -q  --tries=1 --timeout=2 $VDIRECT_URL/api
 	PING_STATUS=$?
 	COUNTER=0
-	while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 300 ]
+	while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 600 ]
  	do
   		echo "Sleeping for 2 seconds...($COUNTER)"
   		sleep 2
@@ -145,7 +171,7 @@ if [ -n "$VDIRECT_IP" ]; then
   		PING_STATUS=$?
 	done
 	if [ $PING_STATUS -ne 0 ]; then
- 		echo "ERROR:Could not connect to vDirect after waiting 5 minutes "
+ 		echo "ERROR:Could not connect to vDirect after waiting 10 minutes "
 	else
  		echo "vDirect is up and running."
  		~/scripts/./edit_vdirect_conf_file.sh ~/scripts/vdirect_cfg/radware_test.cfg
