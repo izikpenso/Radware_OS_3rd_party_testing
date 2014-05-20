@@ -127,7 +127,7 @@ VDIRECT_IP=${VDIRECT_FLOATING_IP}
 #
 echo "export VDIRECT_IP=$VDIRECT_IP" | sudo tee -a ~/devstack/jobrc
 
-if [ -n "$VDIRECT_IP" ] && [ $HA_PAIR_FLAG -eq 'True'] && [ $MULTINODE -eq 'False']; then
+if [ -n "$VDIRECT_IP" ] && [ $HA_PAIR_FLAG -eq 'True' ] && [ $MULTINODE -eq 'False' ]; then
         #
         # wait for vDirect SSH to be up and running
         #
