@@ -10,14 +10,14 @@ if [ -n "$VIP_FLOATING_IP" ]; then
         echo "Waiting for VIP - $VIP_FLOATING_IP status to be ACTIVE..."
         VIP_STATUS=$(neutron lb-vip-show $VIP_ID | grep " status " | get_field 2)
         COUNTER=0
-        while [ $VIP_STATUS != 'ACTIVE' ] && [ $COUNTER -lt 300 ]
+        while [ "$VIP_STATUS" != "ACTIVE" ] && [ $COUNTER -lt 300 ]
         do
                 echo "Sleeping for 10 seconds...($COUNTER)"
                 sleep 10
                 COUNTER=$[COUNTER + 1]
                 VIP_STATUS=$(neutron lb-vip-show $VIP_ID | grep " status " | get_field 2)
         done
-        if [ $VIP_STATUS != 'ACTIVE' ]; then
+        if [ "$VIP_STATUS" != "ACTIVE" ]; then
                 echo "ERROR: VIP - $VIP_FLOATING_IP status is not ACTIVE after waiting for 5 minutes "
                 exit 1
         else
@@ -26,7 +26,7 @@ if [ -n "$VIP_FLOATING_IP" ]; then
 fi
 
 
-if [ -n "$VIP_FLOATING_IP" ] && [ $VIP_STATUS = 'ACTIVE' ]; then
+if [ -n "$VIP_FLOATING_IP" ] && [ "$VIP_STATUS" = "ACTIVE" ]; then
         echo "Waiting for VIP - $VIP_FLOATING_IP to respond to wget..."
         wget -q  --tries=1 --timeout=2 $VIP_FLOATING_IP
         PING_STATUS=$?
