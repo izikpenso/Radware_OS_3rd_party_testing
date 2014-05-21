@@ -153,7 +153,7 @@ if [ -n "$VDIRECT_IP" ] && [ "$HA_PAIR_FLAG" = "True" ] && [ "$MULTINODE" = "Fal
 fi
 
 
-if [ -n "$VDIRECT_IP" ] [ "$HA_PAIR_FLAG" = "False" ]; then
+if [ -n "$VDIRECT_IP" ] && [ "$HA_PAIR_FLAG" = "False" ]; then
 	VDIRECT_URL=http://$VDIRECT_IP:2188
 	#
 	# wait for vDirect API to be up and running
