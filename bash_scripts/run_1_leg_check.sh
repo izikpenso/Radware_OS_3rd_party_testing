@@ -27,6 +27,4 @@ fi
 #source the jobrc file that contains all the needed environment variables for script to run. 
 source $1
 
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP '~/scripts/bash_scripts/./create_1_leg_vip.sh'
-
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP '~/scripts/bash_scripts/./check_vip.sh ~/devstack/jobrc'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP '~/scripts/bash_scripts/./create_1_leg_vip.sh; ~/scripts/bash_scripts/./check_vip.sh ~/devstack/jobrc'
