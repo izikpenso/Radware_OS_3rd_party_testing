@@ -172,6 +172,7 @@ if [ -n "$VDIRECT_IP" ]; then
 	done
 	if [ $PING_STATUS -ne 0 ]; then
  		echo "ERROR:Could not connect to vDirect after waiting 10 minutes "
+                exit 1
 	else
  		echo "vDirect is up and running."
  		~/scripts/./edit_vdirect_conf_file.sh ~/scripts/vdirect_cfg/radware_test.cfg
