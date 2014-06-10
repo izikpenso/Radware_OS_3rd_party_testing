@@ -27,7 +27,8 @@ fi
 echo "will use the following resource file - $1"
 source $1
 
-ssh-keygen -R $VM_IP
+#removes ip ssh known hosts
+ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP
 
 #git Clone devstack to new VM
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'git clone https://github.com/openstack-dev/devstack.git;'
