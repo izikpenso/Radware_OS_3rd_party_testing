@@ -30,23 +30,23 @@ source $1
 #Removes ip ssh known hosts
 ssh-keygen -f ~/.ssh/known_hosts -R $OPENSTACK_SERVER_IP
 
+#removes ip ssh known hosts
+ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP
+
 #Getting tne Network ID from openstack server
 export NET_ID=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $OPENSTACK_SSH_USER@$OPENSTACK_SERVER_IP 'source '"$OPENSTACK_KEYSTONERC_FILE"';neutron net-show '"$NETWORK_NAME"'' | grep ' id ' | cut -d '|' -f 3 | cut -d " " -f 2)
 
 #Booting up new VM and getting the VM ID from openstack server
 export VM_ID=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $OPENSTACK_SSH_USER@$OPENSTACK_SERVER_IP 'source '"$OPENSTACK_KEYSTONERC_FILE"';  nova boot --poll --flavor '"$FLAVOR"' --image '"$IMAGE_NAME"' '"$VM_NAME"' --nic net-id='"$NET_ID"'' | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
-# wait 60 seconds to make sure the boot started.
-sleep 30s
+# wait 100 seconds to make sure the boot started.
+sleep 100s
 
 #Getting tne new VM ID from openstack server
 export VM_IP=$(sshpass -p $OPENSTACK_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $OPENSTACK_SSH_USER@$OPENSTACK_SERVER_IP 'source '"$OPENSTACK_KEYSTONERC_FILE"'; nova show '"$VM_ID"'' | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
 
-#removes ip ssh known hosts
-ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP 
-
-#Adding the VM hostname to the /etc/hosts file on the VM itself. || true  doesn't fail if error.
+#Adding the VM hostname to the /etc/hosts file on the VM itself.
 sshpass -p $VM_SSH_PASSWORD ssh -v -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo '"$VM_IP"' '"$VM_NAME"'.'"$VM_DOMAIN"' '"$VM_NAME"' | sudo tee -a /etc/hosts'
 
 # Adding VM_IP to resource file, so we can use it later.
