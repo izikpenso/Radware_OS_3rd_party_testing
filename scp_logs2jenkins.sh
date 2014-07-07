@@ -25,15 +25,33 @@ fi
 
 source $1
 
+if [ -z "$GERRIT_REFSPEC" ]; then
+      echo "VM_NAME: $VM_NAME"
+      #LOG_FILE_NAME="${VM_NAME}_${BUILD_ID}.tar.gz"
+      LOG_FOLDER_NAME="${VM_NAME}_${BUILD_ID}"
+else
+      echo "GERRIT_REFSPEC is: $GERRIT_REFSPEC"
+      #LOG_FILE_NAME="${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}_${BUILD_ID}.tar.gz"
+      LOG_FOLDER_NAME="${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}_${BUILD_ID}"
+fi
+
+
+mkdir $LOG_FOLDER_NAME
+
+
 # Get vDirect history log
 
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'source ~/devstack/jobrc; python ~/scripts/vdirect_cfg/vdirect_get_history.py $CFG_FILE'
 
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'tar cvzf screen-logs.tar.gz ~/devstack/logs/;'
 
+cp /var/lib/jenkins/jobs/$JOB_NAME/builds/$BUILD_NUMBER/log $LOG_FOLDER_NAME/console.log
 
-sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/*log* .
+#sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'tar cvzf screen-logs.tar.gz ~/devstack/logs/;'
 
-sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/devstack/jobrc jobrc_modified
+sshpass -p $VM_SSH_PASSWORD scp -r $VM_SSH_USER@$VM_IP:~/devstack/logs/ $LOG_FOLDER_NAME/.
+
+sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/*log* $LOG_FOLDER_NAME/.
+
+sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/devstack/jobrc $LOG_FOLDER_NAME/jobrc_modified
 
 
