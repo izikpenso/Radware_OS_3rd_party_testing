@@ -58,4 +58,8 @@ sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/\{q_log.txt,stack.sh.log,s
 # copy modified jobrc to workspace, can be artifact later in jenkins
 sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/ $LOG_FOLDER_NAME/jobrc_modified
 
+# tar all logs so they can be artifact later in jenkins
+tar cvzf $LOG_FOLDER_NAME.tar.gz ~/$LOG_FOLDER_NAME;
+
+
 
