@@ -19,7 +19,7 @@ enable_service q-lbaas
 enable_service tempest
 API_RATE_LIMIT=False
 
-
+KEYSTONE_USE_MOD_WSGI=False
 
 SWIFT_HASH=openstack
 
