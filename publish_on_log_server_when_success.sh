@@ -17,6 +17,6 @@ fi
 source $1
 
 
-shpass -p $LOG_SERVER_PASSWORD ssh -o "StrictHostKeyChecking no" $LOG_SERVER_USER@$LOG_SERVER_IP 'mkdir /oslogs/RADWARE-CI-LOGS/$LOG_FOLDER_NAME'
+sshpass -p $LOG_SERVER_PASSWORD ssh -o "StrictHostKeyChecking no" $LOG_SERVER_USER@$LOG_SERVER_IP 'mkdir /oslogs/RADWARE-CI-LOGS/$LOG_FOLDER_NAME'
 
 sshpass -p $LOG_SERVER_PASSWORD scp $LOG_FOLDER_NAME/\{stack.sh.log.summary,tempest.log,test_load_balancer_log.xml} $LOG_SERVER_USER@$LOG_SERVER_IP:/oslogs/RADWARE-CI-LOGS/.
