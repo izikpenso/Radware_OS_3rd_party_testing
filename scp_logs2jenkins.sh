@@ -47,7 +47,7 @@ echo "export LOG_FOLDER_NAME=$LOG_FOLDER_NAME" >> $1
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'source ~/devstack/jobrc; python ~/scripts/vdirect_cfg/vdirect_get_history.py $CFG_FILE'
 
 
-cp /var/lib/jenkins/jobs/$JOB_NAME/builds/$BUILD_NUMBER/log $LOG_FOLDER_NAME/console.log
+#cp /var/lib/jenkins/jobs/$JOB_NAME/builds/$BUILD_NUMBER/log $LOG_FOLDER_NAME/console.log
 
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'tar cvzf screen-logs.tar.gz ~/devstack/logs/;'
 
