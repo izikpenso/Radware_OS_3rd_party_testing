@@ -174,9 +174,12 @@ if [ -n "$VDIRECT_IP" ]; then
  		echo "ERROR:Could not connect to vDirect after waiting 10 minutes "
                 exit 1
 	else
- 		echo "vDirect is up and running."
- 		~/scripts/./edit_vdirect_conf_file.sh ~/scripts/vdirect_cfg/radware_test.cfg
- 		python ~/scripts/vdirect_cfg/vdirect_lbaas_cfg.py ~/scripts/vdirect_cfg/radware_test.cfg
+ 		if [ -z "$VDIRECT_CFG_FILE" ]; then
+                    VDIRECT_CFG_FILE='radware_test.cfg'
+                fi
+                echo "vDirect is up and running."
+ 		~/scripts/./edit_vdirect_conf_file.sh ~/scripts/vdirect_cfg/$VDIRECT_CFG_FILE
+ 		python ~/scripts/vdirect_cfg/vdirect_lbaas_cfg.py ~/scripts/vdirect_cfg/$VDIRECT_CFG_FILE
 	fi
 fi
 
