@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
+set -x
+
 source ~/devstack/jobrc
 
 
 if [ -z "$HA_PAIR_FLAG" ]; then
-	HA_PAIR_FLAG=False
+        HA_PAIR_FLAG=False
 fi
 
 
@@ -12,27 +14,26 @@ sed -i "s/service_provider=LOADBALANCER:Haproxy/#service_provider=LOADBALANCER:H
 sed -i "s/# service_provider = LOADBALANCER:Radware/service_provider = LOADBALANCER:Radware/g" /etc/neutron/neutron.conf
 
 
-sudo echo '[radware]' > /etc/neutron/services.conf
+sudo echo '[radware]' | sudo tee -a /etc/neutron/neutron.conf
 
-echo "vdirect_address=$VDIRECT_IP" | sudo tee -a /etc/neutron/services.conf
-echo "service_ha_pair=$HA_PAIR_FLAG" | sudo tee -a /etc/neutron/services.conf
+echo "vdirect_address=$VDIRECT_IP" | sudo tee -a /etc/neutron/neutron.conf
+echo "service_ha_pair=$HA_PAIR_FLAG" | sudo tee -a /etc/neutron/neutron.conf
 
 # stop neutron
-PID=`ps -ef | grep neutron-server | grep python | awk '{ print $2 }'`
+PID=`ps -ef | grep neutron-server | grep python | awk '{ print $2 }'` || true
 echo 'Killing neutron ...PID:' $PID
 
 # kill it
-kill $PID
+kill $PID || true
 
 sleep 2
 
 # start neutron
 echo 'Restarting...'
-python /usr/local/bin/neutron-server --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/services.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini > ~/q_err.txt 2> ~/q_log.txt &
+python /usr/local/bin/neutron-server --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini > ~/q_err.txt 2> ~/q_log.txt &
 
 
 sleep 2
 
 NEW_PID=`ps -ef | grep neutron-server | grep python| awk '{ print $2 }'`
 echo 'New PID: ' $NEW_PID
-
