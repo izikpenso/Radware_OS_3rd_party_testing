@@ -28,4 +28,4 @@ fi
 source $1
 
 #Runnuig stack.sh
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP '~/devstack/./stack.sh; exit'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP '~/devstack/./stack.sh > /dev/null;'
