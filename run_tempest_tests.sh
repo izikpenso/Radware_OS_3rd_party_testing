@@ -37,6 +37,8 @@ sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_I
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'nosetests -s -v /opt/stack/tempest/tempest/api/network/radware_test_load_balancer.py --with-xunit --xunit-file=test_load_balancer_log.xml'
 
 #Run test exclude tests that contains 'health' and 'filter'
+#old cmd
+#sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'nosetests -s -v /opt/stack/tempest/tempest/api/network/radware_test_load_balancer.py --exclude=health --exclude=filter --with-xunit --xunit-file=test_load_balancer_log.xml'
 
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'nosetests -s -v /opt/stack/tempest/tempest/api/network/radware_test_load_balancer.py --exclude=health --exclude=filter --with-xunit --xunit-file=test_load_balancer_log.xml'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sudo pip install tempest-lib; cd /opt/stack/tempest/; sudo python -m testtools.run tempest.api.network.radware_test_load_balancer.RadwareLoadBalancerTest.test_create_update_delete_pool_vip'
 
