@@ -26,10 +26,10 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
     _interface = 'json'
 
     @classmethod
-    def tearDownClass(cls):
+    def resource_cleanup(cls):
         # Clean up vips
         for vip in cls.vips:
-            resp, body = cls.client.show_pool(vip['pool_id'])
+            body = cls.client.show_pool(vip['pool_id'])
             pool = body['pool']
             cls.client.delete_vip(vip['id'])
             if (pool['provider'] == 'radware'):
@@ -52,5 +52,6 @@ class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
         for network in cls.networks:
             VD.delete_workflow(rest_client, 'l2_l3_' + network['id'])
             VD.delete_service(rest_client, 'srv_' + network['id'])
+        super(RadwareLoadBalancerTest, cls).resource_cleanup()
 
-        super(RadwareLoadBalancerTest, cls).tearDownClass()
+
