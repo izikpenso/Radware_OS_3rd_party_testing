@@ -185,7 +185,7 @@ def upload_workflow_template(zipFilename, rest_client):
                                                '/api/workflowTemplate',
                                                fileContent,
                                                WORKFLOW_TEMPLATE_HEADER,
-                                               binary=True), [201])
+                                               binary=True), [201, 409])
     return template_workflow_response
 
 def delete_workflow(rest_client, workflow_name):

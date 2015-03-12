@@ -18,7 +18,6 @@
 import time
 
 from tempest.api.network import base
-from tempest.common.utils import data_utils
 from tempest.api.network import test_load_balancer
 
 

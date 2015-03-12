@@ -32,6 +32,11 @@ def setup_vdirect_opensack_cfg(config):
                                     rest_client)
         VD.upload_workflow_template(config['l4_workflow_template_path'],
                                     rest_client)
+        VD.upload_workflow_template(config['os_lb_v2_template_path'],
+                                    rest_client)
+        VD.upload_workflow_template(config['manage_l3_template_path'],
+                                    rest_client)
+
     except Exception as e:
         LOG.error('Fail to invoke vDirect command. Failure details: {0}'.format(e.message))
     
