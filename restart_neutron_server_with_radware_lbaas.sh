@@ -11,7 +11,7 @@ fi
 
 
 sed -i "s/service_provider=LOADBALANCER:Haproxy/#service_provider=LOADBALANCER:Haproxy/g" /etc/neutron/neutron_lbaas.conf
-sed -i "s/# service_provider = LOADBALANCER:Radware/service_provider = LOADBALANCER:Radware/g" /etc/neutron/neutron_lbaas.conf
+sed -i "s/# service_provider = LOADBALANCER:[Rr]adware/service_provider = LOADBALANCER:Radware/g" /etc/neutron/neutron_lbaas.conf
 
 
 sudo echo '[radware]' | sudo tee -a /etc/neutron/neutron.conf
