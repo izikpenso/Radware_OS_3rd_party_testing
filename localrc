@@ -13,6 +13,7 @@ enable_service q-l3
 enable_service q-meta
 enable_service quantum
 enable_service q-lbaas
+enable_service q-lbaasv2
 
 #For tempest
 
