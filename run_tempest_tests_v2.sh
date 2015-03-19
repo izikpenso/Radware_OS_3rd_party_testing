@@ -40,6 +40,6 @@ source $1
 #old cmd
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'nosetests -s -v /opt/stack/tempest/tempest/api/network/radware_test_load_balancer.py --exclude=health --exclude=filter --with-xunit --xunit-file=test_load_balancer_log.xml'
 
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/password=password/password=os/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/etc/tempest.conf'
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cd /opt/stack/neutron-lbaas/neutron_lbaas/; git fetch origin; git reset --hard origin/master; sudo tox -r -e tempest'
 
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/password=password/password=os/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/etc/tempest.conf'
