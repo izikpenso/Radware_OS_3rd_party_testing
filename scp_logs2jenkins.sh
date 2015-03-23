@@ -53,7 +53,7 @@ sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_I
 
 sshpass -p $VM_SSH_PASSWORD scp -r $VM_SSH_USER@$VM_IP:~/devstack/logs $LOG_FOLDER_NAME/.
 
-sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/\{q_log.txt,stack.sh.log.*,vdirect_history.log,vdirect_lbaas_cfg.log} $LOG_FOLDER_NAME/.
+sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:~/\{q_log.txt,stack.sh.log.*,vdirect_history.log,vdirect_lbaas_cfg.log,lbaas_v2_tempest_tests.log} $LOG_FOLDER_NAME/.
 
 sshpass -p $VM_SSH_PASSWORD scp $VM_SSH_USER@$VM_IP:/opt/stack/tempest/\{tempest.log,vdirect_lbaas_cfg.log} $LOG_FOLDER_NAME/.
 
