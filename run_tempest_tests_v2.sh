@@ -45,3 +45,6 @@ sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_I
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/password=password/password=os/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/etc/tempest.conf'
 
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cd /opt/stack/neutron-lbaas/neutron_lbaas/; sudo tox -r -e tempest'
+
+echo $?
+
