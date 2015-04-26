@@ -107,7 +107,9 @@ VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} vDire
 #
 # finding the vDirect IP 
 #
-VDIRECT_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
+# They changed the nova show output to support IPV6, this doesn't work anymore.
+#VDIRECT_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
+VDIRECT_IP=$(nova show "$VM_ID" | grep network | cut -d "," -f 2)
 
 #
 # Adding the vDirect IP  to resource file so it can be used later
