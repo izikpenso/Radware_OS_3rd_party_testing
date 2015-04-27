@@ -58,6 +58,11 @@ MNG_SUBNET_ID=`neutron subnet-create --name mng-subnet --gateway 192.168.23.1 --
 neutron router-interface-add router1 $MNG_SUBNET_ID
 
 #
+# Adding route to the linux machine 
+#
+sudo route add -net 192.168.23.0/24 gw 172.24.4.2
+
+#
 # create admin network called ha-network
 #
 HA_NETWORK_ID=`neutron net-create ha-network -f shell -c id | grep id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
