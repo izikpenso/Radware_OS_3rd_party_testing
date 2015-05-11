@@ -193,7 +193,7 @@ SRV_NETWORK_ID=`neutron net-create srv-network -f shell -c id | grep id | awk 'B
 echo "export SRV_NETWORK_ID=$SRV_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 SRV_SUBNET_ID=`neutron subnet-create --name srv-subnet --gateway 192.168.23.1 --allocation_pool start=192.168.23.100,end=192.168.23.199 $SRV_NETWORK_ID 192.168.23.0/24 | grep " id " | cut -d "|" -f 3`
 
-
+neutron router-interface-add ${DEFAULT_ROUTER_ID} ${SRV_SUBNET_ID}
 #
 # Create Clinet_net in Demo
 #
