@@ -8,7 +8,7 @@ source ~/devstack/openrc admin demo
 POOL_NAME="pool_2_leg"
 VIP_NAME="vip_2_leg"
 
-SERVER_SUBNET_ID=$(neutron net-list | grep ${PRIVATE_NETWORK_ID} | get_field 3 | cut -d " " -f 1)
+SERVER_SUBNET_ID=$(neutron net-list | grep ${SRV_NETWORK_ID} | get_field 3 | cut -d " " -f 1)
 
 echo "export SERVER_SUBNET_ID=$SERVER_SUBNET_ID" | sudo tee -a ~/devstack/jobrc
 

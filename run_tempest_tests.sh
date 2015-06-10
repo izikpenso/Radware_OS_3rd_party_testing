@@ -31,7 +31,7 @@ source $1
 
 # Editing - build_timeout, build_interval, allow_tenant_isolation = False
 
-#sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/#build_timeout = 300/build_timeout = 1200/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/#build_interval = 1/build_interval = 10/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/allow_tenant_isolation = True/allow_tenant_isolation = False/g" /opt/stack/tempest/etc/tempest.conf'
+#sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/#build_timeout = 300/build_timeout = 2015/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/#build_interval = 1/build_interval = 10/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/allow_tenant_isolation = True/allow_tenant_isolation = False/g" /opt/stack/tempest/etc/tempest.conf'
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/if int(time.time()) - start_time >= self.build_timeout:/if int(time.time()) - start_time >= 3000:/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/lib/services/network/json/network_client.py; sed -i "s/allow_tenant_isolation = True/allow_tenant_isolation = False/g" /opt/stack/tempest/etc/tempest.conf'
 
 #Runnuig tempest test and save log

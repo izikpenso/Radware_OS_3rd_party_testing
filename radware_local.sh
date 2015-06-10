@@ -189,9 +189,11 @@ source ~/devstack/openrc admin demo
 # Create server_net in Demo 
 #
 
-PRIVATE_NETWORK_ID=`neutron net-show private -f shell -c id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
-echo "export PRIVATE_NETWORK_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+SRV_NETWORK_ID=`neutron net-create srv-network -f shell -c id | grep id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
+echo "export SRV_NETWORK_ID=$SRV_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+SRV_SUBNET_ID=`neutron subnet-create --name srv-subnet --gateway 192.168.23.1 --allocation_pool start=192.168.23.100,end=192.168.23.199 $SRV_NETWORK_ID 192.168.23.0/24 | grep " id " | cut -d "|" -f 3`
 
+neutron router-interface-add ${DEFAULT_ROUTER_ID} ${SRV_SUBNET_ID}
 #
 # Create Clinet_net in Demo
 #
@@ -228,13 +230,13 @@ glance image-create --name ${WEBSERVER_IMAGE_NAME} --file ~/images/$WEBSERVER_IM
 # Launch 2 Web Servers , this part is relevant only for demos and POCs
 #
 
-VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer1 --nic net-id=${PRIVATE_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer1 --nic net-id=${SRV_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 WEB_SRV1_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 
 echo "export WEB_SRV1_IP=$WEB_SRV1_IP" | sudo tee -a ~/devstack/jobrc
 
-VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer2 --nic net-id=${PRIVATE_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.micro' --image ${WEBSERVER_IMAGE_NAME} WebServer2 --nic net-id=${SRV_NETWORK_ID} --security-groups sg_webserver | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 WEB_SRV2_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
 

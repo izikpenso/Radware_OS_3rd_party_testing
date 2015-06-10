@@ -32,6 +32,36 @@ glance image-create --name ${ALTEON_IMAGE_NAME} --file ~/images/$ALTEON_IMAGE_FI
 VDIRECT_IMAGE_NAME=$(echo $VDIRECT_IMAGE_FILE | rev | cut -d. -f2- | rev)
 glance image-create --name ${VDIRECT_IMAGE_NAME} --file ~/images/$VDIRECT_IMAGE_FILE --disk-format qcow2 --container-format bare --is-public True
 
+
+
+#
+# create admin network called mng-network
+#
+MNG_NETWORK_ID=`neutron net-create mng-network -f shell -c id | grep id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
+
+
+#
+# Adding new netowrk id to resource file so it can be used later
+#
+echo "export MNG_NETWORK_ID=$MNG_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+
+#
+# create subnet to MNG-network on 192.168.23.0 255.255.255.0 192.168.23.1 with allocation pool of 192.168.23.100, 192.168.23.199
+#
+
+MNG_SUBNET_ID=`neutron subnet-create --name mng-subnet --gateway 192.168.23.1 --allocation_pool start=192.168.23.100,end=192.168.23.199 $MNG_NETWORK_ID 192.168.23.0/24 | grep " id " | cut -d "|" -f 3`
+
+#
+# Adding gateway for the mng-network
+#
+
+neutron router-interface-add router1 $MNG_SUBNET_ID
+
+#
+# Adding route to the linux machine 
+#
+sudo route add -net 192.168.23.0/24 gw 172.24.4.2
+
 #
 # create admin network called ha-network
 #
@@ -82,7 +112,7 @@ source ~/devstack/openrc admin demo
 #
 # make the networks shared
 #
-declare -a NETWORKS=('private' 'server-network' 'ha-network');
+declare -a NETWORKS=('mng-network' 'server-network' 'ha-network');
 for network in "${NETWORKS[@]}"
 do
   neutron net-update "${network}" --shared
@@ -92,16 +122,14 @@ done
 # locate the private network id
 #
 
-PRIVATE_NETWORK_ID=`neutron net-show private -f shell -c id | awk 'BEGIN { FS = "=" } ; { print $2 }' | tr -d '"' `
-echo "PRIVATE_NETWORK_ID = $PRIVATE_NETWORK_ID"
 
-echo "export NETWORK_MANAGEMENT_ID=$PRIVATE_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
+echo "export NETWORK_MANAGEMENT_ID=$MNG_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 #
 # Boot the vDirect
 #
 
-VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} vDirectServer --nic net-id=$PRIVATE_NETWORK_ID | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} vDirectServer --nic net-id=$MNG_NETWORK_ID | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 
 #
