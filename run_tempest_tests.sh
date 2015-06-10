@@ -41,5 +41,6 @@ sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_I
 #old cmd
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'nosetests -s -v /opt/stack/tempest/tempest/api/network/radware_test_load_balancer.py --exclude=health --exclude=filter --with-xunit --xunit-file=test_load_balancer_log.xml'
 
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/password = password/password = os/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/etc/tempest.conf'
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sudo pip install tempest-lib; cd /opt/stack/neutron-lbaas/neutron_lbaas/; echo "sudo python -m testtools.run neutron_lbaas.tests.tempest.v1.api.radware_test_load_balancer.RadwareLoadBalancerTest.test_create_update_delete_pool_vip" > ~/lbaas_v1_tempest_tests.log; sudo python -m testtools.run neutron_lbaas.tests.tempest.v1.api.radware_test_load_balancer.RadwareLoadBalancerTest.test_create_update_delete_pool_vip >> ~/lbaas_v1_tempest_tests.log'
 
