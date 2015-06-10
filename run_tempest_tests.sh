@@ -31,7 +31,8 @@ source $1
 
 # Editing - build_timeout, build_interval, allow_tenant_isolation = False
 
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/#build_timeout = 300/build_timeout = 1200/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/#build_interval = 1/build_interval = 10/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/allow_tenant_isolation = True/allow_tenant_isolation = False/g" /opt/stack/tempest/etc/tempest.conf'
+#sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/#build_timeout = 300/build_timeout = 1200/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/#build_interval = 1/build_interval = 10/g" /opt/stack/tempest/etc/tempest.conf; sed -i "s/allow_tenant_isolation = True/allow_tenant_isolation = False/g" /opt/stack/tempest/etc/tempest.conf'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/if int(time.time()) - start_time >= self.build_timeout:/if int(time.time()) - start_time >= 3000:/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/lib/services/network/json/network_client.py; sed -i "s/allow_tenant_isolation = True/allow_tenant_isolation = False/g" /opt/stack/tempest/etc/tempest.conf'
 
 #Runnuig tempest test and save log
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'nosetests -s -v /opt/stack/tempest/tempest/api/network/radware_test_load_balancer.py --with-xunit --xunit-file=test_load_balancer_log.xml'
@@ -40,5 +41,5 @@ sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_I
 #old cmd
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'nosetests -s -v /opt/stack/tempest/tempest/api/network/radware_test_load_balancer.py --exclude=health --exclude=filter --with-xunit --xunit-file=test_load_balancer_log.xml'
 
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sudo pip install tempest-lib; cd /opt/stack/tempest/;echo "sudo python -m testtools.run tempest.api.network.radware_test_load_balancer.RadwareLoadBalancerTest.test_create_update_delete_pool_vip" > ~/lbaas_v1_tempest_tests.log ;sudo python -m testtools.run tempest.api.network.radware_test_load_balancer.RadwareLoadBalancerTest.test_create_update_delete_pool_vip >> ~/lbaas_v1_tempest_tests.log'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sudo pip install tempest-lib; cd /opt/stack/neutron-lbaas/neutron_lbaas/; echo "sudo python -m testtools.run neutron_lbaas.tests.tempest.v1.api.radware_test_load_balancer.RadwareLoadBalancerTest.test_create_update_delete_pool_vip" > ~/lbaas_v1_tempest_tests.log; sudo python -m testtools.run neutron_lbaas.tests.tempest.v1.api.radware_test_load_balancer.RadwareLoadBalancerTest.test_create_update_delete_pool_vip >> ~/lbaas_v1_tempest_tests.log'
 

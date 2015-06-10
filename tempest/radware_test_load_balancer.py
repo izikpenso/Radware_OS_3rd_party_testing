@@ -17,8 +17,7 @@
 
 import time
 
-from tempest.api.network import base
-from tempest.api.network import test_load_balancer
+from neutron_lbaas.tests.tempest.v1.api import test_load_balancer
 
 
 class RadwareLoadBalancerTest(test_load_balancer.LoadBalancerTestJSON):
