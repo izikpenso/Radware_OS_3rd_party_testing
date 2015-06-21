@@ -17,6 +17,7 @@
 
 import time
 
+from tempest_lib import exceptions
 from neutron_lbaas.tests.tempest.v2.api import test_members
 
 
