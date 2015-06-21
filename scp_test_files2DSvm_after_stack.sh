@@ -31,9 +31,11 @@ fi
 # copying vdirect_cfg with modified test.cf to tempest dir
 
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cp -r ~/scripts/vdirect_cfg/ /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v1/api/'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cp -r ~/scripts/vdirect_cfg/ /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v2/api/'
 
 # copying radware tests radware_test_load_balancer.py to /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v1/api/
+sshpass -p $VM_SSH_PASSWORD scp tempest/v1/radware_test_load_balancer.py  $VM_SSH_USER@$VM_IP:/opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v1/api/
 
-sshpass -p $VM_SSH_PASSWORD scp tempest/radware_test_load_balancer.py  $VM_SSH_USER@$VM_IP:/opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v1/api/
-
+# copying radware tests radware_test_members.py to /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v2/api/
+sshpass -p $VM_SSH_PASSWORD scp tempest/v2/radware_test_members.py  $VM_SSH_USER@$VM_IP:/opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v2/api/
 
