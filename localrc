@@ -7,7 +7,6 @@ ADMIN_PASSWORD=os
 disable_service n-net
 
 
-NEUTRON_LBAAS_BRANCH=${GERRIT_REFSPEC:-master}
 enable_plugin neutron-lbaas https://git.openstack.org/openstack/neutron-lbaas $NEUTRON_LBAAS_BRANCH
 
 enable_service q-svc
