@@ -31,13 +31,4 @@ source $1
 ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP
 
 #git Clone devstack to new VM
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'git clone https://github.com/openstack-dev/devstack.git;'
-
-#Copying localrc, resource file to devstack machine
-sshpass -p $VM_SSH_PASSWORD scp localrc $VM_SSH_USER@$VM_IP:~/devstack/.
-
-sshpass -p $VM_SSH_PASSWORD scp $1 $VM_SSH_USER@$VM_IP:~/devstack/.
-
-#Editing localrc: Adding HOST_IP,FLAT_INTERFACE ,NEUTRON_BRANCH parameters
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo 'HOST_IP="$VM_IP"' >> ~/devstack/localrc; echo FLAT_INTERFACE=eth0 >> ~/devstack/localrc'
-
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cd /opt/stack/neutron-lbaas; git fetch https://review.openstack.org/openstack/neutron-lbaas '"$NEUTRON_LBAAS_GERRIT_REFSPEC"' && git cherry-pick FETCH_HEAD'

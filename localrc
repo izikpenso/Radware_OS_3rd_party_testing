@@ -6,9 +6,6 @@ ADMIN_PASSWORD=os
 
 disable_service n-net
 
-
-enable_plugin neutron-lbaas https://git.openstack.org/openstack/neutron-lbaas $NEUTRON_LBAAS_BRANCH
-
 enable_service q-svc
 enable_service q-agt
 enable_service q-dhcp
