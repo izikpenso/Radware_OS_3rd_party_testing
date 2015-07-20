@@ -18,10 +18,10 @@
 import time
 
 from tempest_lib import exceptions
-from neutron_lbaas.tests.tempest.v2.api import test_members
+from neutron_lbaas.tests.tempest.v2.api import test_members_non_admin
 
 
-class RadwareMembersTest(test_members.MemberTestJSON):
+class RadwareMembersTest(test_members_non_admin.MemberTestJSON):
     _interface = 'json'
 
     @classmethod
