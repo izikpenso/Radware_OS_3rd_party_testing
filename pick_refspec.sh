@@ -31,4 +31,4 @@ source $1
 ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP
 
 #git Clone devstack to new VM
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'git config --global user.email "evgenyf@radware.com"; git config --global user.name "evgenyfedoruk"; cd /opt/stack/neutron-lbaas; git fetch https://review.openstack.org/openstack/neutron-lbaas '"$NEUTRON_LBAAS_GERRIT_REFSPEC"' && git cherry-pick FETCH_HEAD'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'git config --global user.email "evgenyf@radware.com"; git config --global user.name "evgenyfedoruk"; cd /opt/stack/neutron-lbaas; git fetch origin; git reset --hard origin/master; git fetch https://review.openstack.org/openstack/neutron-lbaas '"$NEUTRON_LBAAS_GERRIT_REFSPEC"' && git cherry-pick FETCH_HEAD'
