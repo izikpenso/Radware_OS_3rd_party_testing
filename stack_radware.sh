@@ -153,7 +153,7 @@ echo "Waiting for vDirect to start..."
 wget -q  --tries=1 --timeout=2  $VDIRECT_URL/api
 PING_STATUS=$?
 COUNTER=0
-while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 100 ]
+while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 200 ]
  do
   echo "Sleeping for 6 seconds...($COUNTER)"
   sleep 6
@@ -163,7 +163,7 @@ while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 100 ]
 done
 
 if [ $PING_STATUS -ne 0 ]; then
- echo "ERROR:Could not connect to vDirect after waiting 10 minutes "
+ echo "ERROR:Could not connect to vDirect after waiting 20 minutes "
  
 else
  echo "vDirect is up and running."
