@@ -30,7 +30,7 @@ glance --os-tenant-name demo image-create --name ${ALTEON_IMAGE_NAME} --file ~/i
 #
 
 VDIRECT_IMAGE_NAME=$(echo $VDIRECT_IMAGE_FILE | rev | cut -d. -f2- | rev)
-glance  --os-tenant-name demo image-create --name ${VDIRECT_IMAGE_NAME} --file ~/images/$VDIRECT_IMAGE_FILE --disk-format qcow2 --container-format bare
+glance --os-image-api-version 1 --os-tenant-name demo image-create --name ${VDIRECT_IMAGE_NAME} --file ~/images/$VDIRECT_IMAGE_FILE --disk-format qcow2 --container-format bare
 
 
 
@@ -153,10 +153,10 @@ echo "Waiting for vDirect to start..."
 wget -q  --tries=1 --timeout=2  $VDIRECT_URL/api
 PING_STATUS=$?
 COUNTER=0
-while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 600 ]
+while [ $PING_STATUS -ne 0 ] && [ $COUNTER -lt 100 ]
  do
-  echo "Sleeping for 2 seconds...($COUNTER)"
-  sleep 2
+  echo "Sleeping for 6 seconds...($COUNTER)"
+  sleep 6
   COUNTER=$[COUNTER + 1]
   wget -q  --tries=1 --timeout=2 $VDIRECT_URL/api
   PING_STATUS=$?
