@@ -40,6 +40,8 @@ fi
 
 sshpass -p $VM_SSH_PASSWORD scp $LOCAL_SH_FILE $VM_SSH_USER@$VM_IP:~/devstack/local.sh
 
+sshpass -p $VM_SSH_PASSWORD scp stack_radware.sh $VM_SSH_USER@$VM_IP:~/devstack/stack_radware.sh
+
 sshpass -p $VM_SSH_PASSWORD scp edit_vdirect_conf_file.sh $VM_SSH_USER@$VM_IP:~/scripts/.
 
 sshpass -p $VM_SSH_PASSWORD scp restart_neutron_server_with_radware_lbaas.sh $VM_SSH_USER@$VM_IP:~/scripts/.
