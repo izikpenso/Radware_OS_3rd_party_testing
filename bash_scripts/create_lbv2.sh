@@ -20,14 +20,14 @@ CERTIFICATE_NAME=""
 
 function helpmenu {
         echo ""
-        echo "Usage: $0 [--help, -h]"
+        echo "Usage: $0 [ --help | -h ]"
 	echo ""
-        echo "	--name, -n                     LOADBALANCER_NAME"
-	echo "	[--https, -hs]                 CERTIFICATE_NAME, When flag in use both HTTP and HTTPS listeners will be created for VIP"
-        echo "	--vip_subnet_id, -vsn          VIP_SUBNET_ID"
-        echo "	--server_subnet_id, -ssn       SERVER_SUBNET_ID"
-        echo "	--server_address, -sa          SERVER_IP - This flag can be used number of times for multiple servers IPs"
-        echo "	[--public_network, -pn]        PUBLIC_NETWORK_NAME - This flag is optional, when in use it will accosiate folating ip address to VIP"
+        echo "	--name                     LOADBALANCER_NAME"
+	echo "	[--https]                  CERTIFICATE_NAME, When flag in use both HTTP and HTTPS listeners will be created for VIP"
+        echo "	--vip_subnet_id            VIP_SUBNET_ID"
+        echo "	--server_subnet_id         SERVER_SUBNET_ID"
+        echo "	--server_address           SERVER_IP - This flag can be used number of times for multiple servers IPs"
+        echo "	[--public_network]         PUBLIC_NETWORK_NAME - This flag is optional, when in use it will associate floating ip address to VIP"
         echo ""
         echo "Example:"
         echo "$0 --name <LOADBALANCER_NAME> --https <CERTIFICATE_NAME> --vip_subnet_id <VIP_SUBNET_ID> --server_subnet_id <SERVER_SUBNET_ID> /"
@@ -35,14 +35,13 @@ function helpmenu {
 	echo "" 
 }
 
-
 function wait_for_lb_provisioning_status {
 	TIMEOUT=120 # 2 Min
 	START=$(date +%s);
 	NOW=$START;
 	STATUS=$(neutron lbaas-loadbalancer-show $LB_ID | grep provisioning_status | cut -d "|" -f 3 | tr -d '[[:space:]]')
 	while [ $STATUS != "ACTIVE" ] && [ $((NOW-START)) -lt $TIMEOUT ]
-	do
+	do	
 		STATUS=$(neutron lbaas-loadbalancer-show $LB_ID | grep provisioning_status | cut -d "|" -f 3 | tr -d '[[:space:]]')
 		echo "Waiting for LB status to be ACTIVE, Current LB status is $STATUS"
 		sleep 3
@@ -55,7 +54,7 @@ function error_check {
 }
 
 function check_cmd {
-        if [[ $ARG == -* ]]; then
+        if [[ $ARG == --* ]]; then
 		echo ""
 		echo "Error: option $CMD missing argument"
 		helpmenu
@@ -64,7 +63,7 @@ function check_cmd {
 }
 
 function create_listener {
-
+	
 	LISTENER_NAME="$LB_NAME"-"$PROTOCOL"-listener
 	POOL_NAME="$LB_NAME"-"$PROTOCOL"-pool
 	echo ""
@@ -75,16 +74,20 @@ function create_listener {
 	echo "	SERVER_ADDRESSES =$SERVER_ADDRESSES"
 	echo " "
 	echo "Starting $PROTOCOL Configuration....."
-    echo ""
+        echo ""
 	
 	if [ $PROTOCOL = "TERMINATED_HTTPS" ]; then
 		LISTENER_ID=$(neutron lbaas-listener-create --name $LISTENER_NAME --loadbalancer $LB_ID --protocol $PROTOCOL --protocol-port $PROTOCOL_PORT --default-tls-container-ref=$CERTIFICATE_NAME | grep " id " | cut -d "|" -f 3 | tr -d '[[:space:]]')
 	else
 		LISTENER_ID=$(neutron lbaas-listener-create --name $LISTENER_NAME --loadbalancer $LB_ID --protocol $PROTOCOL --protocol-port $PROTOCOL_PORT | grep " id " | cut -d "|" -f 3 | tr -d '[[:space:]]')
 	fi
+	
 	echo "	Listener ID = $LISTENER_ID"
 
+	wait_for_lb_provisioning_status
+
 	POOL_ID=$(neutron lbaas-pool-create --lb-algorithm ROUND_ROBIN --listener $LISTENER_ID --protocol HTTP --name $POOL_NAME | grep " id " | cut -d "|" -f 3 | tr -d '[[:space:]]')
+	
 	echo "	Pool ID = $POOL_ID"
         
         I=0
@@ -104,14 +107,14 @@ do
             helpmenu
             exit
             ;;
-        --name | -n)
+        --name)
 	    CMD=$1
 	    ARG=$2
 	    check_cmd
             LB_NAME=$2
             shift
             ;;
-	--https | -hs)
+	--https)
 	    CMD=$1
             ARG=$2
             check_cmd
@@ -119,28 +122,28 @@ do
             CERTIFICATE_NAME=$2
             shift
             ;;
-        --vip_subnet_id | -vsn)
+        --vip_subnet_id)
             CMD=$1
             ARG=$2
 	    check_cmd
             VIP_SUBNET_ID=$2
             shift
             ;;
-        --server_subnet_id | -ssn)
+        --server_subnet_id)
             CMD=$1
             ARG=$2
 	    check_cmd
             SERVER_SUBNET_ID=$2
             shift
             ;;
-        --server_address | -sa)
+        --server_address)
            CMD=$1
            ARG=$2
 	   check_cmd
            SERVER_ADDRESSES="$SERVER_ADDRESSES $2"
            shift
            ;;
-        --public_network | -pn)
+        --public_network)
            CMD=$1
            ARG=$2
 	   check_cmd
@@ -158,7 +161,6 @@ done
 
 if [ ! -z "$LB_NAME" ] || [ ! -z "$VIP_SUBNET_ID" ] || [ ! -z "$SERVER_SUBNET_ID" ] || [ ! -z "$SERVER_ADDRESSES" ]; then
 	
-
 	echo ""
 	echo "LOADBALNACER_NAME = $LB_NAME"
 	

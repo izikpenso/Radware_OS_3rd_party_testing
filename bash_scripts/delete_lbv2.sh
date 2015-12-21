@@ -33,6 +33,12 @@ function quit_script {
 
 LB_ID=$1
 
+LB_EXISTS=$(neutron lbaas-loadbalancer-show $LB_ID)
+
+if [ -z "$LB_EXISTS" ]; then
+	quit_script
+fi
+
 if [ ! -z "$LB_ID" ]; then 
 	LISTENERS=$(neutron lbaas-loadbalancer-show $LB_ID | grep {\"id\": | cut -d "|" -f 3 | cut -d ":" -f 2 |cut -d "}" -f 1 | tr -d '"')
 else
