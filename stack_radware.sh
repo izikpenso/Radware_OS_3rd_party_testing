@@ -29,9 +29,8 @@ glance --os-tenant-name demo image-create --name ${ALTEON_IMAGE_NAME} --file ~/i
 # create the vDirect image
 #
 
-VDIRECT_IMAGE_NAME=$(echo $VDIRECT_IMAGE_FILE | rev | cut -d. -f2- | rev)
-glance --os-image-api-version 1 --os-tenant-name demo image-create --name ${VDIRECT_IMAGE_NAME} --file ~/images/$VDIRECT_IMAGE_FILE --disk-format qcow2 --container-format bare
-
+#VDIRECT_IMAGE_NAME=$(echo $VDIRECT_IMAGE_FILE | rev | cut -d. -f2- | rev)
+#glance --os-image-api-version 1 --os-tenant-name demo image-create --name ${VDIRECT_IMAGE_NAME} --file ~/images/$VDIRECT_IMAGE_FILE --disk-format qcow2 --container-format bare
 
 
 #
@@ -126,16 +125,27 @@ done
 echo "export NETWORK_MANAGEMENT_ID=$MNG_NETWORK_ID" | sudo tee -a ~/devstack/jobrc
 
 #
+# Installing vDirect
+#
+sudo dpkg -i ~/images/vdirect-server-install-deb-3.21.0-20151223.141512-145.deb
+
+#
+# Starting vDirect
+#
+service vdirect start
+
+#
 # Boot the vDirect
 #
 
-VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} vDirectServer --nic net-id=$MNG_NETWORK_ID | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
+#VM_ID=$(nova boot --poll --flavor 'm1.small' --image ${VDIRECT_IMAGE_NAME} vDirectServer --nic net-id=$MNG_NETWORK_ID | grep " id " | cut -d "|" -f 3 | cut -d " " -f 2)
 
 
 #
 # finding the vDirect IP 
 #
-VDIRECT_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
+#VDIRECT_IP=$(nova show "$VM_ID" | grep network | cut -d "|" -f 3 | cut -d " " -f 2)
+VDIRECT_IP=$VM_IP
 
 #
 # Adding the vDirect IP  to resource file so it can be used later
