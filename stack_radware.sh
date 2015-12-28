@@ -132,7 +132,7 @@ sudo dpkg -i ~/images/vdirect-server-install-deb-3.21.0-20151223.141512-145.deb
 #
 # Starting vDirect
 #
-service vdirect start
+sudo service vdirect start
 
 #
 # Boot the vDirect
