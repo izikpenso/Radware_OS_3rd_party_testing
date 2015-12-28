@@ -12,7 +12,7 @@ fi
 
 #sed -i "s/service_provider = LOADBALANCER:[Rr]adware/# service_provider = LOADBALANCER:Radware/g" /etc/neutron/neutron_lbaas.conf
 #sed -i "s/# service_provider = LOADBALANCERV2:radwarev2/service_provider = LOADBALANCERV2:radwarev2/g" /etc/neutron/neutron_lbaas.conf
-sed -i '/[service_providers]/ a\service_provider = LOADBALANCERV2:radwarev2:neutron_lbaas.drivers.radware.v2_driver.RadwareLBaaSV2Driver:default' /etc/neutron/neutron_lbaas.conf
+sed -i '/service_providers/ a\service_provider = LOADBALANCERV2:radwarev2:neutron_lbaas.drivers.radware.v2_driver.RadwareLBaaSV2Driver:default' /etc/neutron/neutron_lbaas.conf
 sed -i "s/service_plugins = neutron.services.l3_router.l3_router_plugin.L3RouterPlugin,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPlugin/service_plugins = neutron.services.l3_router.l3_router_plugin.L3RouterPlugin,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2/g" /etc/neutron/neutron.conf
 
 

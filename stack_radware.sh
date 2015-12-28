@@ -132,11 +132,11 @@ sudo dpkg -i ~/images/vdirect-server-install-deb-3.21.0-20151223.141512-145.deb
 #
 # Adding  vDirect user
 #
-sudo useradd -p radware vDirect
+#sudo useradd -p radware vDirect
 
 # Configuring vDirect
 #
-sed -i '$ a\vdirect.auth.enableOnDemandTenants=true' /opt/radware/vdirect/database/configuration.properties
+sudo sed -i '$ a\vdirect.auth.enableOnDemandTenants=true' /opt/radware/vdirect/database/configuration.properties
 
 #
 # Starting vDirect
