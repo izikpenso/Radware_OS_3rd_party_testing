@@ -10,7 +10,7 @@ if [ -z "$HA_PAIR_FLAG" ]; then
 fi
 
 
-#sed -i "s/service_provider = LOADBALANCER:Haproxy/#service_provider = LOADBALANCER:Haproxy/g" /etc/neutron/neutron_lbaas.conf
+sed -i "s/service_provider = LOADBALANCER:Haproxy/#service_provider = LOADBALANCER:Haproxy/g" /etc/neutron/neutron_lbaas.conf
 #sed -i "s/# service_provider = LOADBALANCER:[Rr]adware/service_provider = LOADBALANCER:Radware/g" /etc/neutron/neutron_lbaas.conf
 sed -i '/service_providers/ a\service_provider = LOADBALANCER:radware:neutron_lbaas.services.loadbalancer.drivers.radware.driver.LoadBalancerDriver:default' /etc/neutron/neutron_lbaas.conf
 

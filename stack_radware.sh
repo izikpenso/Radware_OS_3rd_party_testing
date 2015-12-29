@@ -127,7 +127,7 @@ echo "export NETWORK_MANAGEMENT_ID=$MNG_NETWORK_ID" | sudo tee -a ~/devstack/job
 #
 # Installing vDirect
 #
-sudo dpkg -i ~/images/vdirect-server-install-deb-3.21.0-20151223.141512-145.deb
+sudo dpkg -i ~/images/$VDIRECT_RPM_INSTALLER
 
 #
 # Adding  vDirect user
