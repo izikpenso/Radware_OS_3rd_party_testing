@@ -28,6 +28,10 @@ def setup_vdirect_opensack_cfg(config):
         VD.assign_vrrp_id_to_pool(rest_client, config)
         VD.create_network_pool(rest_client, config)
         VD.create_resource_pool(rest_client, config)
+        VD.upload_workflow_template(config['l2_l3_workflow_template_path'],
+                                    rest_client)
+        VD.upload_workflow_template(config['l4_workflow_template_path'],
+                                    rest_client)
         VD.upload_workflow_template(config['os_lb_v2_template_path'],
                                     rest_client)
         VD.upload_workflow_template(config['manage_l3_template_path'],
