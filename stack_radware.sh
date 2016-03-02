@@ -22,7 +22,7 @@ source ~/devstack/jobrc
 #
 
 ALTEON_IMAGE_NAME=$(echo $ALTEON_IMAGE_FILE | rev | cut -d. -f2- | rev)
-glance --os-tenant-name demo image-create --name ${ALTEON_IMAGE_NAME} --file ~/images/$ALTEON_IMAGE_FILE  --disk-format qcow2 --container-format bare
+glance image-create --name ${ALTEON_IMAGE_NAME} --file ~/images/$ALTEON_IMAGE_FILE  --disk-format qcow2 --container-format bare
 
 
 #
