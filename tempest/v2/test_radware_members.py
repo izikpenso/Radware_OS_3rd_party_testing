@@ -26,32 +26,29 @@ class RadwareMembersTest(test_members_non_admin.MemberTestJSON):
 
     @classmethod
     def resource_cleanup(cls):
+        print("EVG:radware resource_cleanup starting")
         for lb_id in cls._lbs_to_delete:
             try:
                 lb = cls.load_balancers_client.get_load_balancer_status_tree(
                     lb_id).get('loadbalancer')
             except exceptions.NotFound:
                 continue
+
+            for pool in lb.get('pools'):
+                print("EVG:radware resource_cleanup _try_delete_resource POOL")
+                cls._try_delete_resource(cls.pools_client.delete_pool,
+                                         pool.get('id'))
+                print("EVG:radware resource_cleanup _wait_for_load_balancer_status POOL")
+                cls._wait_for_load_balancer_status(lb_id)
+
             for listener in lb.get('listeners'):
-                for pool in listener.get('pools'):
-                    hm = pool.get('healthmonitor')
-                    if hm:
-                        cls._try_delete_resource(
-                            cls.health_monitors_client.delete_health_monitor,
-                            pool.get('healthmonitor').get('id'))
-                        cls._wait_for_load_balancer_status(lb_id)
-                    cls._try_delete_resource(cls.pools_client.delete_pool,
-                                             pool.get('id'))
-                    cls._wait_for_load_balancer_status(lb_id)
-                    health_monitor = pool.get('healthmonitor')
-                    if health_monitor:
-                        cls._try_delete_resource(
-                            cls.health_monitors_client.delete_health_monitor,
-                            health_monitor.get('id'))
-                    cls._wait_for_load_balancer_status(lb_id)
+                print("EVG:radware resource_cleanup _try_delete_resource LISTENER")
                 cls._try_delete_resource(cls.listeners_client.delete_listener,
                                          listener.get('id'))
+                print("EVG:radware resource_cleanup _wait_for_load_balancer_status LISTENER")
                 cls._wait_for_load_balancer_status(lb_id)
+
+            print("EVG:radware resource_cleanup _try_delete_resource LB")
             cls._try_delete_resource(
                 cls.load_balancers_client.delete_load_balancer, lb_id)
 
@@ -63,7 +60,7 @@ class RadwareMembersTest(test_members_non_admin.MemberTestJSON):
                     time.sleep(10)
                     timer = timer-10
                 except exceptions.NotFound as e:
-                    print("EVG:radware waiting for loadbalancer finished:" + repr(e))
+                    print("EVG:radware waiting for loadbalancer finished:")
                     break
 
         import vdirect_cfg.lib.vdirect_client as VD
