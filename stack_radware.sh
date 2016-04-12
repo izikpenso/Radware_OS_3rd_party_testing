@@ -103,14 +103,14 @@ source ~/devstack/openrc demo demo
 neutron security-group-rule-create --direction ingress --remote-ip-prefix 0.0.0.0/0 default
 
 #
-# Add new flavor for Alteon
-
-nova flavor-create --is-public true Alteon 101 3072 20 1
-
-#
 # change project to demo
 #
 source ~/devstack/openrc admin demo
+
+#
+# Add new flavor for Alteon
+
+nova flavor-create --is-public true Alteon 101 3072 20 1
 
 #
 # make the networks shared
