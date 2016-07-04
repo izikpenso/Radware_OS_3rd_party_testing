@@ -59,7 +59,10 @@ neutron router-interface-add router1 $MNG_SUBNET_ID
 #
 # Adding route to the linux machine 
 #
-sudo route add -net 192.168.23.0/24 gw 172.24.4.2
+#sudo route add -net 192.168.23.0/24 gw 172.24.4.2
+PUBLIC_SUBNET=`neutron subnet-show public-subnet | grep ' id ' | cut -d "|" -f 3 | tr -d '[[:space:]]'`
+ROUTER_INT_IP=`neutron router-show router1 | grep external_gateway_info | cut -d "|" -f 3 | cut -d '[' -f 2 | tr "{" "\n" | grep $PUBLIC_SUBNET | tr "," "\n" | grep "ip_address" | cut -d ":" -f 2 | cut -d "}" -f 1 | tr -d '[[:space:]]' | tr '"' ' '`
+sudo route add -net 192.168.23.0/24 gw $ROUTER_INT_IP
 
 #
 # create admin network called ha-network
