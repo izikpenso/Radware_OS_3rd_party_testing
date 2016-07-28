@@ -18,6 +18,7 @@
 import time
 
 from tempest.lib import exceptions
+from tempest.lib.common.utils import test_utils
 from neutron_lbaas.tests.tempest.v2.api import test_members_non_admin
 
 
@@ -26,7 +27,7 @@ class RadwareMembersTest(test_members_non_admin.MemberTestJSON):
 
     @classmethod
     def resource_cleanup(cls):
-        print("EVG:radware resource_cleanup starting")
+        print("Resource cleanup: starting")
         for lb_id in cls._lbs_to_delete:
             try:
                 lb = cls.load_balancers_client.get_load_balancer_status_tree(
@@ -35,21 +36,23 @@ class RadwareMembersTest(test_members_non_admin.MemberTestJSON):
                 continue
 
             for pool in lb.get('pools'):
-                print("EVG:radware resource_cleanup _try_delete_resource POOL")
-                cls._try_delete_resource(cls.pools_client.delete_pool,
-                                         pool.get('id'))
-                print("EVG:radware resource_cleanup _wait_for_load_balancer_status POOL")
+                print("Resource cleanup: deleting POOL")
+                test_utils.call_and_ignore_notfound_exc(
+                    cls.pools_client.delete_pool,
+                    pool.get('id'))
+                print("Resource cleanup: waiting for POOL to be deleted...")
                 cls._wait_for_load_balancer_status(lb_id)
 
             for listener in lb.get('listeners'):
-                print("EVG:radware resource_cleanup _try_delete_resource LISTENER")
-                cls._try_delete_resource(cls.listeners_client.delete_listener,
-                                         listener.get('id'))
-                print("EVG:radware resource_cleanup _wait_for_load_balancer_status LISTENER")
+                print("Resource cleanup: deleting LISTENER")
+                test_utils.call_and_ignore_notfound_exc(
+                    cls.listeners_client.delete_listener,
+                    listener.get('id'))
+                print("Resource cleanup: waiting for LISTENER to be deleted...")
                 cls._wait_for_load_balancer_status(lb_id)
 
-            print("EVG:radware resource_cleanup _try_delete_resource LB")
-            cls._try_delete_resource(
+            print("Resource cleanup: deleting LB")
+            test_utils.call_and_ignore_notfound_exc(
                 cls.load_balancers_client.delete_load_balancer, lb_id)
 
             timer = 1000
@@ -60,7 +63,7 @@ class RadwareMembersTest(test_members_non_admin.MemberTestJSON):
                     time.sleep(10)
                     timer = timer-10
                 except exceptions.NotFound as e:
-                    print("EVG:radware waiting for loadbalancer finished:")
+                    print("Resource cleanup: finished:")
                     break
 
         import vdirect_cfg.lib.vdirect_client as VD

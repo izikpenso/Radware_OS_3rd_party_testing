@@ -26,7 +26,7 @@ fi
 #source the jobrc file that contains all the needed environment variables for script to run. 
 source $1
 
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/timeout = 300/timeout = 3600/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v2/api/base.py'
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/timeout = 600/timeout = 3600/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/v2/api/base.py'
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'sed -i "s/password = password/password = os/g" /opt/stack/neutron-lbaas/neutron_lbaas/tests/tempest/etc/tempest.conf'
 #sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cd /opt/stack/neutron-lbaas/neutron_lbaas/; echo "sudo python -m testtools.run neutron_lbaas.tests.tempest.v2.api.radware_test_members.RadwareMembersTest.test_add_member" > ~/lbaas_v2_tempest_tests.log; sudo python -m testtools.run neutron_lbaas.tests.tempest.v2.api.radware_test_members.RadwareMembersTest.test_add_member >> ~/lbaas_v2_tempest_tests.log 2>&1'
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'cd /opt/stack/neutron-lbaas/neutron_lbaas/; echo "tox -e apiv2 neutron_lbaas.tests.tempest.v2.api.test_radware_members.RadwareMembersTest.test_add_member" > ~/lbaas_v2_tempest_tests.log; export TEMPEST_CONFIG_DIR=/opt/stack/tempest/etc; tox -e apiv2 neutron_lbaas.tests.tempest.v2.api.test_radware_members.RadwareMembersTest.test_add_member >> ~/lbaas_v2_tempest_tests.log 2>&1'
