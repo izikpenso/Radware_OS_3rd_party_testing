@@ -32,13 +32,8 @@ fi
 
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'mkdir ~/scripts;'
 
-
-
-if [ -z "$LOCAL_SH_FILE" ]; then
-        LOCAL_SH_FILE='local.sh'
-fi
-
 sshpass -p $VM_SSH_PASSWORD scp stack_radware.sh $VM_SSH_USER@$VM_IP:~/devstack/stack_radware.sh
+
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'chmod a+x ~/devstack/stack_radware.sh;'
 
 sshpass -p $VM_SSH_PASSWORD scp edit_vdirect_conf_file.sh $VM_SSH_USER@$VM_IP:~/scripts/.
@@ -52,11 +47,10 @@ sshpass -p $VM_SSH_PASSWORD scp -r bash_scripts/  $VM_SSH_USER@$VM_IP:~/scripts/
 # echoing Alteon and vDirect imagei file name just for fun.
 echo "Using Alteon image: $ALTEON_IMAGE_FILE"
 
-echo "Using vDirect image file: $VDIRECT_IMAGE_FILE"
+echo "Using vDirect RPM file: $VDIRECT_RPM_INSTALLER"
 
 #Downloading Alteon and vDirect images to devstack machine from IMAGE_SERVER_IP
-#sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'mkdir ~/images; cd ~/images/; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$ALTEON_IMAGE_FILE"'; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$VDIRECT_IMAGE_FILE"'; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$WEBSERVER_IMAGE_FILE"''
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'mkdir ~/images; cd ~/images/; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$ALTEON_IMAGE_FILE"'; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$VDIRECT_IMAGE_FILE"'; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$VDIRECT_RPM_INSTALLER"'; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$WEBSERVER_IMAGE_FILE"''
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'mkdir ~/images; cd ~/images/; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$ALTEON_IMAGE_FILE"'; wget -nv -t 3 http://'"$IMAGE_SERVER_IP"'/'"$VDIRECT_RPM_INSTALLER"''
 
 
 
