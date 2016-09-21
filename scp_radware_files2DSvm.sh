@@ -38,8 +38,6 @@ sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_I
 
 sshpass -p $VM_SSH_PASSWORD scp edit_vdirect_conf_file.sh $VM_SSH_USER@$VM_IP:~/scripts/.
 
-sshpass -p $VM_SSH_PASSWORD scp restart_neutron_server_with_radware_lbaas.sh $VM_SSH_USER@$VM_IP:~/scripts/.
-
 sshpass -p $VM_SSH_PASSWORD scp -r vdirect_cfg/  $VM_SSH_USER@$VM_IP:~/scripts/
 
 sshpass -p $VM_SSH_PASSWORD scp -r bash_scripts/  $VM_SSH_USER@$VM_IP:~/scripts/
