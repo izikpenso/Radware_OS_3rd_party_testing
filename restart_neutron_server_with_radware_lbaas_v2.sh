@@ -10,9 +10,9 @@ if [ -z "$HA_PAIR_FLAG" ]; then
 fi
 
 
-#sed -i '/service_providers/ a\service_provider = LOADBALANCERV2:radwarev2:neutron_lbaas.drivers.radware.v2_driver.RadwareLBaaSV2Driver:default' /etc/neutron/neutron_lbaas.conf
-#sed -i "s/service_plugins = neutron.services.l3_router.l3_router_plugin.L3RouterPlugin,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPlugin/service_plugins = neutron.services.l3_router.l3_router_plugin.L3RouterPlugin,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2/g" /etc/neutron/neutron.conf
+sed -i "s/service_provider = /#service_provider = /g" /etc/neutron/neutron_lbaas.conf
 
+sed -i '/service_providers/ a\service_provider = LOADBALANCERV2:radwarev2:neutron_lbaas.drivers.radware.v2_driver.RadwareLBaaSV2Driver:default' /etc/neutron/neutron_lbaas.conf
 
 sudo echo '[radwarev2]' | sudo tee -a /etc/neutron/neutron.conf
 echo "vdirect_address=$VDIRECT_IP" | sudo tee -a /etc/neutron/neutron.conf
