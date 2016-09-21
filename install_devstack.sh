@@ -33,11 +33,10 @@ ssh-keygen -f ~/.ssh/known_hosts -R $VM_IP
 #git Clone devstack to new VM
 sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'git clone https://github.com/openstack-dev/devstack.git;'
 
-#Copying localrc, resource file to devstack machine
-sshpass -p $VM_SSH_PASSWORD scp localrc $VM_SSH_USER@$VM_IP:~/devstack/.
+#Copying local.conf, resource file to devstack machine
+sshpass -p $VM_SSH_PASSWORD scp local.conf $VM_SSH_USER@$VM_IP:~/devstack/.
 
 sshpass -p $VM_SSH_PASSWORD scp $1 $VM_SSH_USER@$VM_IP:~/devstack/.
 
-#Editing localrc: Adding HOST_IP,FLAT_INTERFACE ,NEUTRON_BRANCH parameters
-#sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo 'HOST_IP="$VM_IP"' >> ~/devstack/localrc; echo FLAT_INTERFACE=eth0 >> ~/devstack/localrc'
-sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo 'HOST_IP="$VM_IP"' >> ~/devstack/localrc; echo FLAT_INTERFACE=eth0 >> ~/devstack/localrc ; echo 'NEUTRON_LBAAS_BRANCH="$NEUTRON_LBAAS_GERRIT_REFSPEC"' >> ~/devstack/localrc; echo 'TEMPEST_BRANCH="$TEMPEST_GERRIT_REFSPEC"' >> ~/devstack/localrc; echo 'NOVA_BRANCH="$NOVA_GERRIT_REFSPEC"' >> ~/devstack/localrc;'
+#Editing local.conf: Adding HOST_IP,FLAT_INTERFACE ,NEUTRON_BRANCH parameters
+sshpass -p $VM_SSH_PASSWORD ssh -o "StrictHostKeyChecking no" $VM_SSH_USER@$VM_IP 'echo 'HOST_IP="$VM_IP"' >> ~/devstack/local.conf; echo FLAT_INTERFACE=eth0 >> ~/devstack/local.conf ; echo 'NEUTRON_LBAAS_BRANCH="$NEUTRON_LBAAS_GERRIT_REFSPEC"' >> ~/devstack/local.conf; echo 'TEMPEST_BRANCH="$TEMPEST_GERRIT_REFSPEC"' >> ~/devstack/local.conf; echo 'NOVA_BRANCH="$NOVA_GERRIT_REFSPEC"' >> ~/devstack/local.conf;'
