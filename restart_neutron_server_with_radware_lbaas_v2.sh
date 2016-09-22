@@ -17,6 +17,8 @@ sed -i '/service_providers/ a\service_provider = LOADBALANCERV2:radwarev2:neutro
 sudo echo '[radwarev2]' | sudo tee -a /etc/neutron/neutron.conf
 echo "vdirect_address=$VDIRECT_IP" | sudo tee -a /etc/neutron/neutron.conf
 echo "service_ha_pair=$HA_PAIR_FLAG" | sudo tee -a /etc/neutron/neutron.conf
+echo "vdirect_user=root" | sudo tee -a /etc/neutron/neutron.conf
+echo "vdirect_password=radware" | sudo tee -a /etc/neutron/neutron.conf
 
 # stop neutron
 PID=`ps -ef | grep neutron-server | grep python | awk '{ print $2 }'` || true
