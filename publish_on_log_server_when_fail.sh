@@ -16,4 +16,4 @@ fi
 #source the jobrc file that contains all the needed environment variables for script to run. 
 source $1
 
-sshpass -p $LOG_SERVER_PASSWORD scp -r $LOG_FOLDER_NAME $LOG_SERVER_USER@$LOG_SERVER_IP:/oslogs/RADWARE-CI-LOGS
+sshpass -p $LOG_SERVER_PASSWORD scp -r $LOG_FOLDER_NAME $LOG_SERVER_USER@$LOG_SERVER_IP:/data/RADWARE-CI-LOGS
